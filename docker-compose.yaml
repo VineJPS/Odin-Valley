@@ -1,12 +1,20 @@
-version: '3.8'
-
 services:
   app:
     build: .
     volumes:
       - .:/usr/src/app
-    ports:
-      - "8000:8000"
+      - /tmp/.X11-unix:/tmp/.X11-unix
+    environment:
+      - DISPLAY=${DISPLAY}
+      # Resolve o erro de XDG
+      - XDG_RUNTIME_DIR=/tmp
+      # Otimização que o log sugeriu
+      - PYGAME_DETECT_AVX2=1
+    # Dá acesso ao hardware de som e vídeo
+    devices:
+      - /dev/dri:/dev/dri
+      - /dev/snd:/dev/snd
+    network_mode: host
     stdin_open: true
     tty: true
-    command: python manage.py runserver 0.0.0.0:8000
+    command: python index.py
