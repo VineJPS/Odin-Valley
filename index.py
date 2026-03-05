@@ -27,7 +27,7 @@ while running:
     screen.fill(VERDE_ODIN)
 
     # Desenha um texto na tela
-    texto = font.render("Odin Valley está rodando no Docker!", True, BRANCO)
+    texto = font.render("Odin Valley está rodando no Docker! Teste de PR ;)", True, BRANCO)
     screen.blit(texto, (150, 250))
 
     # Atualiza o frame
