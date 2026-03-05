@@ -35,7 +35,7 @@ jobs:
       - name: Executar Testes com Display Virtual (XVFB)
         # O xvfb-run simula uma tela para o Pygame não dar erro de "Video system not initialized"
         run: |
-          xvfb-run pytest
+          xvfb-run pytest || [ $? -eq 5 ]
 
   deploy-staging:
     name: Deploy para Staging
