@@ -51,10 +51,12 @@ jobs:
   deploy-producao:
     name: Deploy para Produção
     needs: testes
-    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: main # Garante que estamos pegando a main
       - name: Simular Deploy Produção
         run: echo "Gerando Build Final do Jogo!"
