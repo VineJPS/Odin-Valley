@@ -11,6 +11,6 @@ def test_pygame_init():
 def test_screen_creation():
     # Testa se conseguimos criar uma superfície de vídeo no XVFB
     pygame.init()
-    screen = pygame.display.set_mode((640, 480))
-    assert screen.get_width() == 640
+    screen = pygame.display.set_mode((800, 600))
+    assert screen.get_width() == 800
     pygame.quit()
