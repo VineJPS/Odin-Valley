@@ -1,6 +1,9 @@
 services:
   app:
-    build: .
+    container_name: Odin-Valley
+    build:
+      context: .                   # Mantém a raiz como base para enxergar o index.py
+      dockerfile: docker/Dockerfile # Indica o caminho do arquivo de receita
     privileged: true # Dá permissão total ao hardware (som/vídeo)
     volumes:
       - .:/usr/src/app

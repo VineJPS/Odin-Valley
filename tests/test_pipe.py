@@ -1,9 +1,9 @@
-# test_game.py
+# Salve este arquivo EXATAMENTE com o nome: test_game.py
 import pygame
 import pytest
 
 def test_pygame_init():
-    # Testa se o pygame inicializa corretamente no ambiente virtual
+    # Testa se o pygame inicializa corretamente
     pygame.init()
     assert pygame.get_init() == True
     pygame.quit()
@@ -11,6 +11,7 @@ def test_pygame_init():
 def test_screen_creation():
     # Testa se conseguimos criar uma superfície de vídeo no XVFB
     pygame.init()
-    screen = pygame.display.set_mode((640, 480))
+    # Ajustei para 640 para bater com o assert abaixo
+    screen = pygame.display.set_mode((640, 480)) 
     assert screen.get_width() == 640
     pygame.quit()
