@@ -10,8 +10,9 @@ jobs:
   testes:
     name: Rodar Testes (Pygame + Pytest)
     runs-on: ubuntu-latest
+    # Define o tempo máximo de execução para este job específico
+    timeout-minutes: 20
     
-    # Definindo variáveis globais para o job de teste para evitar que o Pygame trave
     env:
       SDL_VIDEODRIVER: "dummy"
       SDL_AUDIODRIVER: "dummy"
@@ -39,7 +40,6 @@ jobs:
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
       - name: Executar Testes com Display Virtual (XVFB)
-        # O -a encontra automaticamente um display livre para o servidor X
         run: |
           xvfb-run -a pytest
 
@@ -48,6 +48,7 @@ jobs:
     needs: testes
     if: github.event_name == 'push' && github.ref == 'refs/heads/staging'
     runs-on: ubuntu-latest
+    timeout-minutes: 10 # Deploys costumam ser mais rápidos
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -59,6 +60,7 @@ jobs:
     needs: testes
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - name: Checkout
         uses: actions/checkout@v4
