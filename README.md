@@ -1,7 +1,7 @@
-# TropicoGame
+# Odin-Valley
 
 ##  Tecnologias
-* **Backend:** Python / Django
+* **Backend:** Python
 * **Infraestrutura:** Docker & Docker Compose
 * **Banco de Dados:** SQL 
 
@@ -11,17 +11,23 @@
 * **Matheus** (MatheusMenck)
 
 ---
-
-## Como Rodar o Projeto (Docker)
-
-Siga os passos abaixo para configurar o ambiente e rodar o projeto pela primeira vez.
-
 | Etapa | Comando | O que faz? |
 | :--- | :--- | :--- |
-| 1. Criar Imagem | `docker build -t python-pygame .` | Lê o seu Dockerfile e instala o Python, Django e as bibliotecas de sistema. |
-| 2. Criar Container | `docker run -it --rm --name tropico-game python-pygame` | Usa a imagem para gerar os arquivos do projeto (manage.py, etc.) na sua pasta real. |
-| 3. Da permissão para escrever na tela | xhost +local:docker | permissão de escrita. |
-| 4. Subir | `docker-compose up` | Liga o servidor e deixa o site disponível em http://localhost:8000. |
+| **1. Permissão de Vídeo** | `xhost +local:docker` | **(Linux apenas)** Permite que o container abra a janela do jogo na sua tela. |
+| **2. Criar Imagem** | `docker-compose build` | Constrói a imagem base instalando Python, SDL e as dependências. |
+| **3. Subir o Jogo** | `docker-compose up` | Inicia o container **Odin-Valley** e executa o `index.py` automaticamente. |
+| **4. Rodar Testes** | `docker-compose run --rm app pytest` | Executa a suite de testes (Pytest) para validar o código. |
+
+---
+
+##  Solução de Problemas
+
+Se encontrar erros de execução ou de bibliotecas, utilize os comandos de manutenção abaixo:
+
+### 1. Reinstalar tudo do zero (Build sem Cache)
+Se você alterou o `requirements.txt` ou se o Docker estiver dando erro de `ModuleNotFoundError`, force uma reconstrução limpa:
+```bash
+docker-compose build --no-cache
 
 > **Nota para Linux:** Caso os arquivos criados pelo Docker apareçam com um cadeado, rode:
 > 
