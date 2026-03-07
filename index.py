@@ -13,7 +13,7 @@ VERDE_ODIN = (34, 139, 34)
 BRANCO = (255, 255, 255)
 
 # Fonte para escrever na tela
-font = pygame.font.SysFont("Arial", 36)
+font = pygame.font.SysFont("Arial", 35)
 
 # 3. Loop Principal (O que mantém o container vivo)
 running = True
