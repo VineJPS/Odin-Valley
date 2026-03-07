@@ -10,6 +10,13 @@ jobs:
   testes:
     name: Rodar Testes (Pygame + Pytest)
     runs-on: ubuntu-latest
+    
+    # Definindo variáveis globais para o job de teste para evitar que o Pygame trave
+    env:
+      SDL_VIDEODRIVER: "dummy"
+      SDL_AUDIODRIVER: "dummy"
+      PYGAME_HIDE_SUPPORT_PROMPT: "hide"
+
     steps:
       - name: Checkout do código
         uses: actions/checkout@v4
@@ -21,7 +28,6 @@ jobs:
           cache: 'pip'
 
       - name: Instalar Dependências do Sistema (SDL)
-        # O Pygame precisa dessas bibliotecas do sistema para funcionar no Linux
         run: |
           sudo apt-get update
           sudo apt-get install -y python3-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev libsdl2-dev libportmidi-dev xvfb
@@ -33,9 +39,9 @@ jobs:
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
       - name: Executar Testes com Display Virtual (XVFB)
-        # O xvfb-run simula uma tela para o Pygame não dar erro de "Video system not initialized"
+        # O -a encontra automaticamente um display livre para o servidor X
         run: |
-          xvfb-run pytest || [ $? -eq 5 ]
+          xvfb-run -a pytest
 
   deploy-staging:
     name: Deploy para Staging
@@ -57,6 +63,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          ref: main # Garante que estamos pegando a main
+          ref: main
       - name: Simular Deploy Produção
         run: echo "Gerando Build Final do Jogo!"
