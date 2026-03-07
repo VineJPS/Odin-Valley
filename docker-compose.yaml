@@ -1,16 +1,16 @@
 services:
   app:
     build: .
+    privileged: true # Dá permissão total ao hardware (som/vídeo)
     volumes:
       - .:/usr/src/app
       - /tmp/.X11-unix:/tmp/.X11-unix
     environment:
       - DISPLAY=${DISPLAY}
-      # Resolve o erro de XDG
       - XDG_RUNTIME_DIR=/tmp
-      # Otimização que o log sugeriu
       - PYGAME_DETECT_AVX2=1
-    # Dá acesso ao hardware de som e vídeo
+      # Força o uso do driver de vídeo do sistema
+      - SDL_VIDEODRIVER=x11
     devices:
       - /dev/dri:/dev/dri
       - /dev/snd:/dev/snd

@@ -1,3 +1,7 @@
+pygame-ce
+pygame-gui
+pytmx
+pathfinding
 pandas
 requests
-pygame
+pytest
