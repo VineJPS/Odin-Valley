@@ -3,14 +3,24 @@ name: Pipeline CI/CD Pygame
 on:
   push:
     branches: [ "main", "staging" ]
+    # Não roda a pipeline se as alterações forem apenas nestes arquivos
+    paths-ignore:
+      - 'README.md'
+      - '.gitignore'
+      - 'docs/**'
+      - 'LICENSE'
   pull_request:
     branches: [ "main", "staging" ]
+    paths-ignore:
+      - 'README.md'
+      - '.gitignore'
+      - 'docs/**'
+      - 'LICENSE'
 
 jobs:
   testes:
     name: Rodar Testes (Pygame + Pytest)
     runs-on: ubuntu-latest
-    # Define o tempo máximo de execução para este job específico
     timeout-minutes: 20
     
     env:
@@ -48,12 +58,12 @@ jobs:
     needs: testes
     if: github.event_name == 'push' && github.ref == 'refs/heads/staging'
     runs-on: ubuntu-latest
-    timeout-minutes: 10 # Deploys costumam ser mais rápidos
+    timeout-minutes: 10
     steps:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Simular Deploy Staging
-        run: echo "Subindo versão de teste do jogo..."
+        run: echo "Subindo versão de teste do jogo para ambiente de homologação..."
 
   deploy-producao:
     name: Deploy para Produção
@@ -67,4 +77,4 @@ jobs:
         with:
           ref: main
       - name: Simular Deploy Produção
-        run: echo "Gerando Build Final do Jogo!"
+        run: echo "Gerando Build Final do Jogo Odin-Valley!"
