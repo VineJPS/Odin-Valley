@@ -5,12 +5,15 @@
 * **Infraestrutura:** Docker & Docker Compose
 * **Banco de Dados:** SQL 
 
-##  Devs
+##  Equipe
 * **Vinicius** (VineJPS)
 * **Renan** (RenanHB1)
 * **Matheus** (MatheusMenck)
+* **Sthefani** (Sthee2004)
 
 ---
+
+##  Iniciando o Projeto
 | Etapa | Comando | O que faz? |
 | :--- | :--- | :--- |
 | **1. Permissão de Vídeo** | `xhost +local:docker` | **(Linux apenas)** Permite que o container abra a janela do jogo na sua tela. |
