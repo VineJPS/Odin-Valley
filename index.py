@@ -1,38 +1,45 @@
 import pygame
 import sys
+from src.core.Engine import Engine
 
-# 1. Inicializa o Pygame
-pygame.init()
+def main():
+    pygame.init()
+    tela = pygame.display.set_mode((800, 600))
+    fonte = pygame.font.SysFont("Arial", 40)
+    
+    while True:
+        tela.fill((30, 30, 30))
+        mouse = pygame.mouse.get_pos()
+        
+        # Define os Retângulos dos Botões
+        btn_start = pygame.Rect(300, 200, 200, 60)
+        btn_exit = pygame.Rect(300, 300, 200, 60)
 
-# 2. Configura a janela (Largura, Altura)
-screen = pygame.display.set_mode((800, 600))
-pygame.display.set_caption("Odin Valley - Teste Docker")
+        # Desenha Botão Start
+        pygame.draw.rect(tela, (50, 150, 50), btn_start, border_radius=10)
+        txt_start = fonte.render("Start", True, (255, 255, 255))
+        tela.blit(txt_start, txt_start.get_rect(center=btn_start.center))
 
-# Cores
-VERDE_ODIN = (34, 139, 34)
-BRANCO = (255, 255, 255)
+        # Desenha Botão Exit
+        pygame.draw.rect(tela, (150, 50, 50), btn_exit, border_radius=10)
+        txt_exit = fonte.render("Exit", True, (255, 255, 255))
+        tela.blit(txt_exit, txt_exit.get_rect(center=btn_exit.center))
 
-# Fonte para escrever na tela
-font = pygame.font.SysFont("Arial", 36)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if btn_start.collidepoint(mouse):
+                    # Instancia e inicia a Engine apenas ao clicar em Start
+                    meu_app = Engine(tela) 
+                    meu_app.start()
+                if btn_exit.collidepoint(mouse):
+                    pygame.quit()
+                    sys.exit()
 
-# 3. Loop Principal (O que mantém o container vivo)
-running = True
-while running:
-    # Trata eventos (clicar no X, teclado, etc)
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
+        pygame.display.flip()
 
-    # Preenche o fundo
-    screen.fill(VERDE_ODIN)
-
-    # Desenha um texto na tela
-    texto = font.render("Odin Valley estaá rodando no Docker! teste", True, BRANCO)
-    screen.blit(texto, (150, 250))
-
-    # Atualiza o frame
-    pygame.display.flip()
-
-# 4. Finaliza o programa corretamente
-pygame.quit()
-sys.exit()
+if __name__ == "__main__":
+    main()
