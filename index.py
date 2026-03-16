@@ -4,7 +4,12 @@ from src.core.Engine import Engine
 
 def main():
     pygame.init()
-    tela = pygame.display.set_mode((800, 600))
+    # Pega a resolução real do seu monitor
+    info = pygame.display.Info()
+    resolucao_nativa = (info.current_w, info.current_h)
+
+    # Atribui a variável com suporte a tela cheia e redimensionamento automático
+    tela = pygame.display.set_mode(resolucao_nativa, pygame.FULLSCREEN | pygame.SCALED)
     fonte = pygame.font.SysFont("Arial", 40)
     
     while True:
