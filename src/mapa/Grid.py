@@ -1,29 +1,23 @@
 import pygame
 
 class Grid:
-    def __init__(self, tela_w, tela_h, colunas=25, linhas=25):
+    def __init__(self, colunas=25, linhas=25, tile_size=100):
         self.colunas = colunas
         self.linhas = linhas
-        
-        # O tamanho do tile baseado na largura da tela
-        self.tile_size = tela_w // colunas
-        
-        # Inicializa a matriz preenchida com zeros
-        self.data = [[0 for _ in range(self.colunas)] for _ in range(self.linhas)]
+        self.tile_size = tile_size
 
-    def draw_debug(self, surface):
-        """Desenha as linhas do grid para orientação"""
-        cor = (255, 255, 255, 30)
+    def draw_debug(self, surface, cam_x, cam_y):
+        cor_linha = (255, 255, 255, 40) # Branco suave
         
         largura_total = self.colunas * self.tile_size
         altura_total = self.linhas * self.tile_size
 
-        # Desenha linhas verticais
+        # Desenha as linhas verticais
         for c in range(self.colunas + 1):
-            x = c * self.tile_size
-            pygame.draw.line(surface, cor, (x, 0), (x, altura_total))
+            x = (c * self.tile_size) - cam_x
+            pygame.draw.line(surface, cor_linha, (x, -cam_y), (x, altura_total - cam_y))
             
-        # Desenha linhas horizontais
+        # Desenha as linhas horizontais
         for l in range(self.linhas + 1):
-            y = l * self.tile_size
-            pygame.draw.line(surface, cor, (0, y), (largura_total, y))
+            y = (l * self.tile_size) - cam_y
+            pygame.draw.line(surface, cor_linha, (-cam_x, y), (largura_total - cam_x, y))
