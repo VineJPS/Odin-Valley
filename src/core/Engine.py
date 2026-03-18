@@ -8,12 +8,11 @@ class Engine:
         self.clock = pygame.time.Clock()
         self.running = True
 
-        #por hora estatico em apenas 1
         self.mapa_selecionado = 1
-
-        # Componentes do Jogo
+        # Ajuste: Mapa agora recebe apenas o ID para carregar a matriz interna
+        self.mapa = Mapa(self.mapa_selecionado)
+        
         largura, altura = self.screen.get_size()
-        self.mapa = Mapa(largura, altura,  self.mapa_selecionado )
         self.grid = Grid(largura, altura)
 
     def start(self):
@@ -25,8 +24,13 @@ class Engine:
                     if event.key == pygame.K_ESCAPE: 
                         self.running = False
 
+            # Ajuste: Limpa a tela antes de desenhar o novo frame
+            self.screen.fill((0, 0, 0))
+
+            # Chamada da função
             self.mapa.draw(self.screen)
-            self.grid.draw_debug(self.screen)
             
+            #caso queira visualizar o grid na tela
+            #self.grid.draw_debug(self.screen)
             pygame.display.flip()
             self.clock.tick(60)
