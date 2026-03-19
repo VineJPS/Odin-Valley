@@ -11,9 +11,10 @@ class Mapa:
         
         # Configura as imagens
         self.biomas = {
-            1: "assets/img/grama.png",
-            2: "assets/img/terra.png",
-            3: "assets/img/neve.png"
+            1: "assets/img/terra.png",
+            2: "assets/img/grama.png",
+            3: "assets/img/agua.png",
+            4: "assets/img/areia.png"
         }
         self.tiles = self._configurar_tiles()
 
