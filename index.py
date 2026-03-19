@@ -11,22 +11,45 @@ def main():
     # Atribui a variável com suporte a tela cheia e redimensionamento automático
     tela = pygame.display.set_mode(resolucao_nativa, pygame.FULLSCREEN | pygame.SCALED)
     fonte = pygame.font.SysFont("Arial", 40)
+
+    # Inicia musica, (-1) Deixa a musica em loop infinito
+    pygame.mixer.music.load("assets/songs/song.mp3")
+    pygame.mixer.music.play(-1)
+    pygame.mixer.music.set_volume(0.5)
+
+    # Adicionando o background do menu
+    bg = pygame.image.load("assets/img/background.png").convert()
+    bg = pygame.transform.scale(bg, resolucao_nativa)
+
     
     while True:
-        tela.fill((30, 30, 30))
+        # Deixando o background atras de todos elemento na tela
+        tela.blit(bg, (0, 0))
+
         mouse = pygame.mouse.get_pos()
         
         # Define os Retângulos dos Botões
-        btn_start = pygame.Rect(300, 200, 200, 60)
-        btn_exit = pygame.Rect(300, 300, 200, 60)
+        btn_start = pygame.Rect(0, 0, 200, 60)
+        btn_option = pygame.Rect(0, 0, 200, 60)
+        btn_exit = pygame.Rect(0, 0, 200, 60)
+
+        #Centralizando os botões
+        btn_start.center = (info.current_w//2,info.current_h//2)
+        btn_option.center = (info.current_w//2,info.current_h//2+100)
+        btn_exit.center = (info.current_w//2,info.current_h//2+200)
 
         # Desenha Botão Start
-        pygame.draw.rect(tela, (50, 150, 50), btn_start, border_radius=10)
+        pygame.draw.rect(tela, (255, 140, 58), btn_start, border_radius=10)
         txt_start = fonte.render("Start", True, (255, 255, 255))
         tela.blit(txt_start, txt_start.get_rect(center=btn_start.center))
 
+        # Desenha Botão Option
+        pygame.draw.rect(tela, (255, 140, 58), btn_option, border_radius=10)
+        txt_exit = fonte.render("Option", True, (255, 255, 255))
+        tela.blit(txt_exit, txt_exit.get_rect(center=btn_option.center))
+
         # Desenha Botão Exit
-        pygame.draw.rect(tela, (150, 50, 50), btn_exit, border_radius=10)
+        pygame.draw.rect(tela, (255, 140, 58), btn_exit, border_radius=10)
         txt_exit = fonte.render("Exit", True, (255, 255, 255))
         tela.blit(txt_exit, txt_exit.get_rect(center=btn_exit.center))
 

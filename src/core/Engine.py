@@ -36,7 +36,7 @@ class Engine:
             self.mapa.draw(self.screen, self.camera.x, self.camera.y)
             
             # Desenha o grid por cima
-            self.grid.draw_debug(self.screen, self.camera.x, self.camera.y)
+            # self.grid.draw_debug(self.screen, self.camera.x, self.camera.y)
             
             pygame.display.flip()
             self.clock.tick(60)
