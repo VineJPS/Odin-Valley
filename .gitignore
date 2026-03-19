@@ -1,5 +1,10 @@
-# Python - Byte-compiled / optimized / DLL files
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
+
+Odin-Valley
+Odin-Valley.exe
+build/
+dist/
+*.spec
