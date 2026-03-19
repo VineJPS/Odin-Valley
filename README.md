@@ -23,6 +23,17 @@
 
 ---
 
+##  Criando o Executavel
+| Etapa | Comando | O que faz? |
+| :--- | :--- | :--- |
+| **1. Permissão de Vídeo** | `xhost +local:docker` | **(Linux apenas)** Permite que o container abra a janela do jogo na sua tela. |
+| **2. Subir o Container** | `docker-compose up` | Inicia o container **Odin-Valley** e executa o `index.py` automaticamente. |
+| **3. Acessar o container** | `docker-compose exec app bash` | Entra no container onde as bibliotecas estão instaladas. |
+| **4. Criar o Executavel** | `python3 build_game.py` | Executa o arquivo **build_game.py** que gera o executável. |
+| **5. Abrir o jogo em wine** | `wine Odin-Valley.exe` | Inicia o jogo **Apenas Linux** |
+
+---
+
 ##  Solução de Problemas
 
 Se encontrar erros de execução ou de bibliotecas, utilize os comandos de manutenção abaixo:
@@ -31,7 +42,3 @@ Se encontrar erros de execução ou de bibliotecas, utilize os comandos de manut
 Se você alterou o `requirements.txt` ou se o Docker estiver dando erro de `ModuleNotFoundError`, force uma reconstrução limpa:
 ```bash
 docker-compose build --no-cache
-
-> **Nota para Linux:** Caso os arquivos criados pelo Docker apareçam com um cadeado, rode:
-> 
-> `sudo chown -R $USER:$USER .`
