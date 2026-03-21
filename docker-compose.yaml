@@ -2,22 +2,28 @@ services:
   app:
     container_name: Odin-Valley
     build:
-      context: .                   # Mantém a raiz como base para enxergar o index.py
-      dockerfile: docker/Dockerfile # Indica o caminho do arquivo de receita
-    privileged: true # Dá permissão total ao hardware (som/vídeo)
+      context: .
+      dockerfile: docker/Dockerfile
+    privileged: true
     volumes:
       - .:/usr/src/app
       - /tmp/.X11-unix:/tmp/.X11-unix
+      # INCREMENTO: Mapeia o socket de áudio do seu usuário real
+      - /run/user/1000/pulse:/run/user/1000/pulse
+      - ~/.config/pulse/cookie:/root/.config/pulse/cookie
     environment:
       - DISPLAY=${DISPLAY}
       - XDG_RUNTIME_DIR=/tmp
       - PYGAME_DETECT_AVX2=1
-      # Força o uso do driver de vídeo do sistema
       - SDL_VIDEODRIVER=x11
-      - PYTHONPYCACHEPREFIX=/tmp/pycache
+      # INCREMENTO: Aponta o servidor de som para o socket mapeado
+      - PULSE_SERVER=unix:/run/user/1000/pulse/native
     devices:
       - /dev/dri:/dev/dri
       - /dev/snd:/dev/snd
+    group_add:
+      - audio
+      - video
     network_mode: host
     stdin_open: true
     tty: true
