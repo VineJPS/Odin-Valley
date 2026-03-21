@@ -1,12 +1,12 @@
 import pygame
-from src.mapa.MapaGenerator import MapaGenerator
+from src.mapa.MapaLoader import MapaLoader
 
 class Mapa:
     def __init__(self, id_mapa=1, tile_size=100):
         self.tile_size = tile_size
         
         # Usa o gerador para buscar os dados do arquivo .txt
-        self.gerador = MapaGenerator()
+        self.gerador = MapaLoader()
         self.dados_mapa = self.gerador.carregar_matriz(id_mapa)
         
         # Configura as imagens
