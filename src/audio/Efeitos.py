@@ -1,0 +1,1 @@
+# Crie funções para os efeitos (clique do mouse, barulho da contrução etc) do jogo - Deixo a Critério do responsavel como será sua organização

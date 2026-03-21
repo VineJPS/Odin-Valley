@@ -12,7 +12,7 @@ def build():
     # Define o separador: Linux (:) ou Windows (;)
     sep = ";" if sys.platform.startswith("win") else ":"
 
-    print(f"--- 🛠️ Gerando Build de Arquivo Único em: {base_dir} ---")
+    print(f"--- Gerando Build de Arquivo Único em: {base_dir} ---")
 
     # 2. O PULO DO GATO:
     # Mapeamos as pastas para que o PyInstaller crie a mesma estrutura 

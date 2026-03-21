@@ -1,6 +1,6 @@
 import os
 
-class MapaGenerator:
+class MapaLoader:
     def __init__(self):
         # Localiza a pasta onde os arquivos .txt estão (mesma pasta deste script)
         self.diretorio_base = os.path.dirname(__file__)
