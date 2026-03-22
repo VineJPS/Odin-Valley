@@ -2,6 +2,7 @@ import pygame
 from src.mapa.Mapa import Mapa
 from src.mapa.Grid import Grid
 from src.core.Camera import Camera
+from src.ui.Hud import Hud
 
 class Engine:
     def __init__(self, tela):
@@ -17,6 +18,10 @@ class Engine:
         self.grid = Grid(colunas=cols, linhas=lins, tile_size=tile)
         self.camera = Camera(colunas=cols, linhas=lins, tile_size=tile, velocidade=12)
 
+        #necessario para renderizar o hud
+        largura_janela, altura_janela = self.screen.get_size()        
+        self.hud = Hud(largura_janela, altura_janela)
+
     def start(self):
         while self.running:
             largura_janela, altura_janela = self.screen.get_size()
@@ -30,6 +35,8 @@ class Engine:
                 if event.type == pygame.KEYDOWN:  
                     if event.key == pygame.K_g:   
                         self.mostrar_grid = not self.mostrar_grid  
+                    if event.key == pygame.K_h:
+                        self.hud.toggle_controles()
 
             # 1. Atualiza a posição da câmera (com travas)
             self.camera.mover_por_teclado(largura_janela, altura_janela)
@@ -45,6 +52,8 @@ class Engine:
             # Desenha o grid por cima
             if self.mostrar_grid:
                 self.grid.draw_debug(self.screen, self.camera.x, self.camera.y)
-            
+            # desenha o menu dos controles
+            self.hud.desenhar(self.screen)
+
             pygame.display.flip()
             self.clock.tick(60)
