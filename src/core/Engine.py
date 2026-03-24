@@ -12,43 +12,50 @@ class Engine:
         self.mostrar_grid = False
 
         # Definições do mapa 25x25 com tiles de 100 pixels - Sempre que for alterar o tamanho do mapa, mude aqui.
-        cols, lins, tile = 25, 25, 100
-        
-        self.mapa = Mapa(id_mapa = 4, tile_size=tile)
-        self.grid = Grid(colunas=cols, linhas=lins, tile_size=tile)
-        self.camera = Camera(colunas=cols, linhas=lins, tile_size=tile, velocidade=12)
+        self.cols, self.lins, tile = 25, 25, 100
+        self.mapa   = Mapa(id_mapa=4, tile_size=tile)
+        self.grid   = Grid(colunas=self.cols, linhas=self.lins, tile_size=tile)
+        self.camera = Camera(colunas=self.cols, linhas=self.lins, tile_size=tile, velocidade=12)
 
-        #necessario para renderizar o hud
-        largura_janela, altura_janela = self.screen.get_size()        
+        # necessario para renderizar o hud
+        largura_janela, altura_janela = self.screen.get_size()
         self.hud = Hud(largura_janela, altura_janela)
 
     def start(self):
         while self.running:
             largura_janela, altura_janela = self.screen.get_size()
-            
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                     self.running = False
-                # Faz o grid aparecer com G
-                if event.type == pygame.KEYDOWN:  
-                    if event.key == pygame.K_g:   
-                        self.mostrar_grid = not self.mostrar_grid  
+
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_g:
+                        self.mostrar_grid = not self.mostrar_grid
                     if event.key == pygame.K_h:
                         self.hud.toggle_controles()
+
+                if event.type == pygame.MOUSEWHEEL:
+                    if event.y > 0:
+                        self.camera.zoom_in(largura_janela, altura_janela)
+                    else:
+                        self.camera.zoom_out(largura_janela, altura_janela)
+
+            # Atualiza zoom suave — recria Mapa e Grid só se algo mudou
+            if self.camera.atualizar_zoom(largura_janela, altura_janela):
+                self.mapa = Mapa(id_mapa=4, tile_size=int(self.camera.tile_size))
+                self.grid = Grid(colunas=self.cols, linhas=self.lins, tile_size=int(self.camera.tile_size))
 
             # 1. Atualiza a posição da câmera (com travas)
             self.camera.mover_por_teclado(largura_janela, altura_janela)
             self.camera.mover_por_mouse(largura_janela, altura_janela)
             self.camera.coordenadas_mouse()
-            
             # 2. Renderização
-            self.screen.fill((20, 20, 20)) # Fundo escuro
-            
+            self.screen.fill((20, 20, 20))
             # Desenha o chão primeiro
             self.mapa.draw(self.screen, self.camera.x, self.camera.y)
-            
             # Desenha o grid por cima
             if self.mostrar_grid:
                 self.grid.draw_debug(self.screen, self.camera.x, self.camera.y)
