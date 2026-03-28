@@ -67,7 +67,7 @@ class Camera:
         mouse_buttons = pygame.mouse.get_pressed()
         mouse_pos = pygame.mouse.get_pos()
         # Botão [0] é o Esquerdo. Se quiser o Direito, use [2].
-        if mouse_buttons[0]: 
+        if mouse_buttons[2]: 
             if not self.clicando:
                 self.clicando = True
             else:
