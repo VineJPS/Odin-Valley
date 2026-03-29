@@ -1,13 +1,15 @@
 import pygame
 from src.core.Construcao import Construcao
+from src.mapa.Mapa import Mapa
 
 class SistemaConstruir:
-    def __init__(self, cols, lins, grid, camera, screen):
+    def __init__(self, cols, lins, grid, camera, screen, mapa):
         self.cols = cols
         self.lins = lins
         self.grid = grid
         self.camera = camera
         self.screen = screen
+        self.mapa = mapa
         
         self.construcoes = []
         self.modo_construcao = False
@@ -38,7 +40,7 @@ class SistemaConstruir:
         pos_grid = self.grid.tela_para_grid(mouse_pos, self.camera.x, self.camera.y)
         
         if pos_grid:
-            if event.button == 1:  # Esquerdo
+            if event.button == 1: 
                 if self.modo_construcao:
                     if not self.tem_construcao(pos_grid):
                         self.construir(pos_grid)
@@ -47,7 +49,7 @@ class SistemaConstruir:
                 else:
                     self.grid.selecionar_celula(mouse_pos, self.camera.x, self.camera.y)
             
-            elif event.button == 3:  # Direito
+            elif event.button == 3:  
                 self.remover_construcao(pos_grid)
 
     def atualizar_tile_size(self, tile_size):
@@ -67,8 +69,13 @@ class SistemaConstruir:
         return None
     
     def construir(self, pos_grid):
-        if 0 <= pos_grid[0] < self.cols and 0 <= pos_grid[1] < self.lins:
-            if not self.tem_construcao(pos_grid):
+        x, y = pos_grid
+
+        if 0 <= x < self.cols and 0 <= y < self.lins:
+
+            id_tile = self.mapa.dados_mapa[y][x]
+
+            if not self.tem_construcao(pos_grid) and id_tile != 3:
                 nova_construcao = Construcao(
                     self.tipo_construcao_atual,
                     pos_grid,
@@ -76,6 +83,7 @@ class SistemaConstruir:
                 )
                 self.construcoes.append(nova_construcao)
                 return True 
+
         return False
     
     def remover_construcao(self, pos_grid):

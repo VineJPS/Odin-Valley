@@ -23,7 +23,7 @@ class Engine:
         largura_janela, altura_janela = self.screen.get_size()
         self.hud = Hud(largura_janela, altura_janela)
         
-        self.sistema_construir = SistemaConstruir(self.cols, self.lins, self.grid, self.camera, self.screen)
+        self.sistema_construir = SistemaConstruir(self.cols, self.lins, self.grid, self.camera, self.screen, self.mapa)
 
     def start(self):
         while self.running:

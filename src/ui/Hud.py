@@ -29,8 +29,8 @@ class Hud:
             ("WASD / SETAS ou mouse - movimentar camera", self.Branco),
             ("G - Mostrar/Esconder grid", self.Branco),
             ("H - Mostrar/Esconder controles", self.Branco),
+            ("B - alternar entre o modo de contrução/visualização ", self.Branco),
             ("ESC - voltar para o menu principal", self.Branco),
-            ("Coordenadas: ", self.Branco),
         ]
         
         for texto, cor in textos:
@@ -47,10 +47,12 @@ class Hud:
         y_offset = 100
         
         controles = [
-            "CONTROLES DE CONSTRUÇÃO:",
+            "CONTROLES DO MODO CONSTRUÇÃO:",
             "1,2,3,4 - Selecionar tipo de construção",
             "Clique Esquerdo - Construir",
             "Clique Direito - Remover construção",
+            "B - alternar entre o modo de contrução/visualização",
+            "ESC - voltar para o menu principal"
         ]
         
         for i, texto in enumerate(controles):
