@@ -1,7 +1,7 @@
 import pygame
 
 class Grid:
-    def __init__(self, colunas=25, linhas=25, tile_size=100):
+    def __init__(self, colunas=50, linhas=50, tile_size=100):
         self.colunas = colunas
         self.linhas = linhas
         self.tile_size = tile_size

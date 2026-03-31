@@ -1,6 +1,8 @@
 import pygame
 import sys
 from src.core.Engine import Engine
+from src.audio.Efeitos import GerenciadorEfeitos
+from src.audio.SoundTrack import GerenciadorMusica
 
 def main():
     pygame.init()
@@ -12,10 +14,12 @@ def main():
     tela = pygame.display.set_mode(resolucao_nativa, pygame.FULLSCREEN | pygame.SCALED)
     fonte = pygame.font.SysFont("Arial", 40)
 
-    # Inicia musica, (-1) Deixa a musica em loop infinito
-    pygame.mixer.music.load("assets/songs/song.mp3")
-    pygame.mixer.music.play(-1)
-    pygame.mixer.music.set_volume(0.5)
+    # Iniciando os gerenciadores de som
+    efeitos = GerenciadorEfeitos()
+    musica = GerenciadorMusica()
+
+    # Iniciando a Musica do Menu
+    musica.soundtrack("menu")
 
     # Adicionando o background do menu
     bg = pygame.image.load("assets/img/background.png").convert()
@@ -60,9 +64,12 @@ def main():
             
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if btn_start.collidepoint(mouse):
+                    efeitos.tocar("clique")
+                    musica.soundtrack("song1")
                     # Instancia e inicia a Engine apenas ao clicar em Start
                     meu_app = Engine(tela) 
                     meu_app.start()
+
                 if btn_exit.collidepoint(mouse):
                     pygame.quit()
                     sys.exit()

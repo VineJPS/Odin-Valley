@@ -5,6 +5,8 @@ from src.core.Camera import Camera
 from src.ui.Hud import Hud
 from src.core.Construcao import Construcao
 from src.core.SistemaConstruir import SistemaConstruir
+from src.audio.SoundTrack import GerenciadorMusica
+from src.audio.Efeitos import GerenciadorEfeitos
 
 class Engine:
     def __init__(self, tela):
@@ -14,8 +16,8 @@ class Engine:
         self.mostrar_grid = False
 
         # Definições do mapa 25x25 com tiles de 100 pixels
-        self.cols, self.lins, tile = 25, 25, 100
-        self.mapa   = Mapa(id_mapa=4, tile_size=tile)
+        self.cols, self.lins, tile = 50, 50, 100
+        self.mapa   = Mapa(id_mapa=1, tile_size=tile)
         self.grid   = Grid(colunas=self.cols, linhas=self.lins, tile_size=tile)
         self.camera = Camera(colunas=self.cols, linhas=self.lins, tile_size=tile, velocidade=12)
 
@@ -24,6 +26,10 @@ class Engine:
         self.hud = Hud(largura_janela, altura_janela)
         
         self.sistema_construir = SistemaConstruir(self.cols, self.lins, self.grid, self.camera, self.screen, self.mapa)
+
+        # Iniciando os gereciadores de som
+        self.efeitos = GerenciadorEfeitos()
+        self.musica = GerenciadorMusica()
 
     def start(self):
         while self.running:
@@ -34,6 +40,7 @@ class Engine:
                     self.running = False
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                     self.running = False
+                    self.musica.soundtrack("menu")
 
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_g:
@@ -61,7 +68,7 @@ class Engine:
                         self.camera.zoom_out(largura_janela, altura_janela)
 
             if self.camera.atualizar_zoom(largura_janela, altura_janela):
-                self.mapa = Mapa(id_mapa=4, tile_size=int(self.camera.tile_size))
+                self.mapa = Mapa(id_mapa=1, tile_size=int(self.camera.tile_size))
                 self.grid = Grid(colunas=self.cols, linhas=self.lins, tile_size=int(self.camera.tile_size))
                 self.sistema_construir.atualizar_tile_size(int(self.camera.tile_size))
 
