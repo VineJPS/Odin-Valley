@@ -2,8 +2,7 @@ name: Pipeline CI/CD Pygame
 
 on:
   push:
-    branches: [ "main", "staging" ]
-    # Não roda a pipeline se as alterações forem apenas nestes arquivos
+    branches: [ "main", "staging", "feature/**", "fix/**" ]
     paths-ignore:
       - 'README.md'
       - '.gitignore'
