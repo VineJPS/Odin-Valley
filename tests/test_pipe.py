@@ -9,7 +9,7 @@ def test_pygame_init():
     pygame.quit()
 
 def test_screen_creation():
-    # Testa se conseguimos crsdfsadfsadfiar uma superfície de vídeo no XVFB
+    # Testa se conseguimos casdfrsdfsadfsadfiar uma superfície de vídeo no XVFB
     pygame.init()
     # Ajustei para 640 para bater com o assert abaixo
     screen = pygame.display.set_mode((640, 480)) 
