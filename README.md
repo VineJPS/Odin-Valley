@@ -34,6 +34,9 @@
 
 ---
 
+## Abrindo PR
+utilize os prefixos "feature" para criação de algo novo, ou "fix" na correção de um bug. Ex: feature/adicionado-zoom ou fix/correcao-zoom
+
 ##  Solução de Problemas
 
 Se encontrar erros de execução ou de bibliotecas, utilize os comandos de manutenção abaixo:
