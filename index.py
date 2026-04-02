@@ -38,9 +38,9 @@ def main():
         btn_exit = pygame.Rect(0, 0, 200, 60)
 
         #Centralizando os botões
-        btn_start.center = (info.current_w//2,info.current_h//2)
-        btn_option.center = (info.current_w//2,info.current_h//2+100)
-        btn_exit.center = (info.current_w//2,info.current_h//2+200)
+        btn_start.center = (info.current_w//2,info.current_h//2+50)
+        btn_option.center = (info.current_w//2,info.current_h//2+150)
+        btn_exit.center = (info.current_w//2,info.current_h//2+250)
 
         # Desenha Botão Start
         pygame.draw.rect(tela, (255, 140, 58), btn_start, border_radius=10)
@@ -49,8 +49,8 @@ def main():
 
         # Desenha Botão Option
         pygame.draw.rect(tela, (255, 140, 58), btn_option, border_radius=10)
-        txt_exit = fonte.render("Option", True, (255, 255, 255))
-        tela.blit(txt_exit, txt_exit.get_rect(center=btn_option.center))
+        txt_option = fonte.render("Option", True, (255, 255, 255))
+        tela.blit(txt_option, txt_option.get_rect(center=btn_option.center))
 
         # Desenha Botão Exit
         pygame.draw.rect(tela, (255, 140, 58), btn_exit, border_radius=10)
@@ -69,6 +69,9 @@ def main():
                     # Instancia e inicia a Engine apenas ao clicar em Start
                     meu_app = Engine(tela) 
                     meu_app.start()
+
+                if btn_option.collidepoint(mouse):
+                    efeitos.tocar("clique")
 
                 if btn_exit.collidepoint(mouse):
                     pygame.quit()
