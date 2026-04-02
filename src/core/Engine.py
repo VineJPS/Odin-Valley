@@ -2,7 +2,7 @@ import pygame
 from src.mapa.Mapa import Mapa
 from src.mapa.Grid import Grid
 from src.core.Camera import Camera
-from src.ui.Hud import Hud
+from src.ui.Hud import Hud,GerenciamentoHud,recursoHud
 from src.core.Construcao import Construcao
 from src.core.SistemaConstruir import SistemaConstruir
 from src.audio.SoundTrack import GerenciadorMusica
@@ -24,6 +24,10 @@ class Engine:
         # necessario para renderizar o hud
         largura_janela, altura_janela = self.screen.get_size()
         self.hud = Hud(largura_janela, altura_janela)
+        self.recursos = recursoHud(self.screen)
+        self.martelo = GerenciamentoHud(largura_janela, altura_janela, 60, "Martelo.png", "1", 1.5)
+        self.estatisticas = GerenciamentoHud(largura_janela-215, altura_janela+20, 45, "estatisticas.png", "2", 1.5)
+        self.lixo = GerenciamentoHud(largura_janela+215, altura_janela+20, 45, "lixo.png", "3", 0.9)
         
         self.sistema_construir = SistemaConstruir(self.cols, self.lins, self.grid, self.camera, self.screen, self.mapa)
 
@@ -83,6 +87,10 @@ class Engine:
             if self.mostrar_grid:
                 self.grid.draw_debug(self.screen, self.camera.x, self.camera.y)
             self.hud.desenhar(self.screen)
+            self.recursos.exibir_recursos()
+            self.martelo.desenhar_circulo(self.screen)
+            self.estatisticas.desenhar_circulo(self.screen)
+            self.lixo.desenhar_circulo(self.screen)
 
             pygame.display.flip()
             self.clock.tick(60)
