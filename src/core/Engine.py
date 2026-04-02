@@ -15,11 +15,11 @@ class Engine:
         self.running = True
         self.mostrar_grid = False
 
-        # Definições do mapa 25x25 com tiles de 100 pixels
-        self.cols, self.lins, tile = 50, 50, 100
-        self.mapa   = Mapa(id_mapa=1, tile_size=tile)
-        self.grid   = Grid(colunas=self.cols, linhas=self.lins, tile_size=tile)
-        self.camera = Camera(colunas=self.cols, linhas=self.lins, tile_size=tile, velocidade=12)
+        self.mapa = Mapa(id_mapa=1, tile_size=100)
+        self.cols = len(self.mapa.dados_mapa[0])
+        self.lins = len(self.mapa.dados_mapa)
+        self.grid   = Grid(colunas=self.cols, linhas=self.lins, tile_size=100)
+        self.camera = Camera(colunas=self.cols, linhas=self.lins, tile_size=100, velocidade=12)
 
         # necessario para renderizar o hud
         largura_janela, altura_janela = self.screen.get_size()
@@ -72,9 +72,12 @@ class Engine:
                         self.camera.zoom_out(largura_janela, altura_janela)
 
             if self.camera.atualizar_zoom(largura_janela, altura_janela):
-                self.mapa = Mapa(id_mapa=1, tile_size=int(self.camera.tile_size))
-                self.grid = Grid(colunas=self.cols, linhas=self.lins, tile_size=int(self.camera.tile_size))
-                self.sistema_construir.atualizar_tile_size(int(self.camera.tile_size))
+                self.mapa = Mapa(id_mapa=1, tile_size=self.camera.tile_size)
+                self.cols = len(self.mapa.dados_mapa[0])
+                self.lins = len(self.mapa.dados_mapa)
+                self.grid = Grid(colunas=self.cols, linhas=self.lins, tile_size=self.camera.tile_size)
+                self.camera = Camera(colunas=self.cols, linhas=self.lins, tile_size=self.camera.tile_size, velocidade=12)
+                self.sistema_construir = SistemaConstruir(self.cols, self.lins, self.grid, self.camera, self.screen, self.mapa)
 
             self.camera.mover_por_teclado(largura_janela, altura_janela)
             self.camera.mover_por_mouse(largura_janela, altura_janela)
