@@ -35,8 +35,8 @@ class Grid:
 
     def tela_para_grid(self, pos_mouse, cam_x, cam_y):
         x, y = pos_mouse
-        grid_x = int((x + cam_x) // self.tile_size)
-        grid_y = int((y + cam_y) // self.tile_size)
+        grid_x = round((x + cam_x) / self.tile_size)
+        grid_y = round((y + cam_y) / self.tile_size)
         
         if 0 <= grid_x < self.colunas and 0 <= grid_y < self.linhas:
             return (grid_x, grid_y)

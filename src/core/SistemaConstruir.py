@@ -40,11 +40,14 @@ class SistemaConstruir:
         pos_grid = self.grid.tela_para_grid(mouse_pos, self.camera.x, self.camera.y)
         
         if pos_grid:
+            print(f"Mouse click at grid pos: {pos_grid}")  # Debug coord
             if event.button == 1: 
                 if self.modo_construcao:
                     if not self.tem_construcao(pos_grid):
-                        self.construir(pos_grid)
+                        success = self.construir(pos_grid)
+                        print(f"Build {'success' if success else 'failed'} at {pos_grid}")
                     else:
+                        print(f"Already building at {pos_grid}")
                         self.grid.selecionar_celula(mouse_pos, self.camera.x, self.camera.y)
                 else:
                     self.grid.selecionar_celula(mouse_pos, self.camera.x, self.camera.y)
@@ -72,16 +75,21 @@ class SistemaConstruir:
         x, y = pos_grid
 
         if 0 <= x < self.cols and 0 <= y < self.lins:
-
-            id_tile = self.mapa.dados_mapa[y][x]
+            try:
+                id_tile = self.mapa.dados_mapa[y][x]
+                print(f"Grid {pos_grid}: tile_id={id_tile}, water?={id_tile==3}, has_build?={self.tem_construcao(pos_grid)}")  # Debug
+            except IndexError as e:
+                print(f"IndexError at {pos_grid}: {e}")
+                return False
 
             if not self.tem_construcao(pos_grid) and id_tile != 3:
                 nova_construcao = Construcao(
                     self.tipo_construcao_atual,
                     pos_grid,
-                    int(self.camera.tile_size)
+                    self.camera.tile_size  # float ok now
                 )
                 self.construcoes.append(nova_construcao)
+                print(f"Built {self.tipo_construcao_atual} at {pos_grid}")
                 return True 
 
         return False
@@ -103,8 +111,8 @@ class SistemaConstruir:
         pos_grid = self.grid.tela_para_grid(mouse_pos, self.camera.x, self.camera.y)
         
         if pos_grid and not self.tem_construcao(pos_grid):
-            x = (pos_grid[0] * self.camera.tile_size) - self.camera.x
-            y = (pos_grid[1] * self.camera.tile_size) - self.camera.y
+            x = round(pos_grid[0] * self.camera.tile_size) - self.camera.x
+            y = round(pos_grid[1] * self.camera.tile_size) - self.camera.y
             
             surface = pygame.Surface((self.camera.tile_size, self.camera.tile_size), pygame.SRCALPHA)
             
