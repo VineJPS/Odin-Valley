@@ -34,6 +34,9 @@
 
 ---
 
+## Abrindo PR
+Crie uma nova Branch (Atualizada) a partir da main com os prefixos "feature" criação de algo novo ou "fix" correção de bugs. EX feature/adicao-zoom || fix/correcao-zoom
+
 ##  Solução de Problemas
 
 Se encontrar erros de execução ou de bibliotecas, utilize os comandos de manutenção abaixo:
