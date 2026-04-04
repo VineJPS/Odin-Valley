@@ -35,4 +35,11 @@ class Construcao:
             texto_rect = texto.get_rect(center=(x + self.tile_size//2, y + self.tile_size//2))
             surface.blit(texto, texto_rect)
         except:
-            pass 
+            pass
+
+    def to_dict(self):
+        return {'tipo': self.tipo, 'posicao': self.posicao}
+
+    @classmethod
+    def from_dict(cls, data, tile_size):
+        return cls(data['tipo'], data['posicao'], tile_size)

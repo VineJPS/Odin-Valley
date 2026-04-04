@@ -28,7 +28,7 @@ class Camera:
 
     def _definir_alvo(self, delta, largura_tela, altura_tela):
         minimo = max(50, math.ceil(largura_tela / self.colunas), math.ceil(altura_tela / self.linhas))
-        self.tile_alvo = max(float(minimo), min(200.0, self.tile_alvo + delta))
+        self.tile_alvo = max(50.0, min(200.0, self.tile_alvo + delta))
 
     def atualizar_zoom(self, largura_tela, altura_tela):
         """Deve ser chamado todo frame. Interpola tile_size em direção ao tile_alvo."""
@@ -38,7 +38,7 @@ class Camera:
         minimo = max(50, math.ceil(largura_tela / self.colunas), math.ceil(altura_tela / self.linhas))
         fator_anterior = self.tile_size
         self.tile_size += (self.tile_alvo - self.tile_size) * self.zoom_velocidade
-        self.tile_size = max(float(minimo), self.tile_size)
+        self.tile_size = max(40.0, min(200.0, self.tile_size))
 
         fator = self.tile_size / fator_anterior
         self.mundo_w = self.colunas * self.tile_size
