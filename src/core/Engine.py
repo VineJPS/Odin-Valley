@@ -30,6 +30,7 @@ class Engine:
         self.lixo = GerenciamentoHud(largura_janela+215, altura_janela+20, 45, "lixo.png", "3", 0.9)
         
         self.sistema_construir = SistemaConstruir(self.cols, self.lins, self.grid, self.camera, self.screen, self.mapa)
+        self.construcoes_persistentes = []
 
         # Iniciando os gereciadores de som
         self.efeitos = GerenciadorEfeitos()
@@ -72,12 +73,22 @@ class Engine:
                         self.camera.zoom_out(largura_janela, altura_janela)
 
             if self.camera.atualizar_zoom(largura_janela, altura_janela):
+                # Save constructions before recreation
+                self.construcoes_persistentes = [c.to_dict() for c in self.sistema_construir.construcoes]
+                
                 self.mapa = Mapa(id_mapa=1, tile_size=self.camera.tile_size)
                 self.cols = len(self.mapa.dados_mapa[0])
                 self.lins = len(self.mapa.dados_mapa)
                 self.grid = Grid(colunas=self.cols, linhas=self.lins, tile_size=self.camera.tile_size)
                 self.camera = Camera(colunas=self.cols, linhas=self.lins, tile_size=self.camera.tile_size, velocidade=12)
                 self.sistema_construir = SistemaConstruir(self.cols, self.lins, self.grid, self.camera, self.screen, self.mapa)
+                
+                # Restore constructions
+                self.sistema_construir.construcoes = [
+                    Construcao.from_dict(data, self.camera.tile_size) 
+                    for data in self.construcoes_persistentes
+                ]
+                self.sistema_construir.atualizar_tile_size(self.camera.tile_size)
 
             self.camera.mover_por_teclado(largura_janela, altura_janela)
             self.camera.mover_por_mouse(largura_janela, altura_janela)
