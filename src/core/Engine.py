@@ -73,7 +73,6 @@ class Engine:
                         self.camera.zoom_out(largura_janela, altura_janela)
 
             if self.camera.atualizar_zoom(largura_janela, altura_janela):
-                # Save constructions before recreation
                 self.construcoes_persistentes = [c.to_dict() for c in self.sistema_construir.construcoes]
                 
                 self.mapa = Mapa(id_mapa=1, tile_size=self.camera.tile_size)
@@ -83,7 +82,6 @@ class Engine:
                 self.camera = Camera(colunas=self.cols, linhas=self.lins, tile_size=self.camera.tile_size, velocidade=12)
                 self.sistema_construir = SistemaConstruir(self.cols, self.lins, self.grid, self.camera, self.screen, self.mapa)
                 
-                # Restore constructions
                 self.sistema_construir.construcoes = [
                     Construcao.from_dict(data, self.camera.tile_size) 
                     for data in self.construcoes_persistentes
@@ -94,6 +92,19 @@ class Engine:
             self.camera.mover_por_mouse(largura_janela, altura_janela)
             self.camera.coordenadas_mouse()
             
+            if self.sistema_construir.modo_construcao:
+                self.hud.estado_hud = "construcao"
+            else:
+                self.hud.estado_hud = "controles"
+
+            if self.sistema_construir.modo_construcao:
+                self.hud.estado_hud = "construcao"
+            else:
+                self.hud.estado_hud = "controles"
+
+            # Renderização
+            self.screen.fill((20, 20, 20))
+
             # Renderização
             self.screen.fill((20, 20, 20))
             self.mapa.draw(self.screen, self.camera.x, self.camera.y)
