@@ -2,11 +2,12 @@ import pygame
 from src.mapa.Mapa import Mapa
 from src.mapa.Grid import Grid
 from src.core.Camera import Camera
-from src.ui.Hud import Hud,GerenciamentoHud,recursoHud
+from src.ui.Hud import Hud, GerenciamentoHud, recursoHud
 from src.core.Construcao import Construcao
 from src.core.SistemaConstruir import SistemaConstruir
 from src.audio.SoundTrack import GerenciadorMusica
 from src.audio.Efeitos import GerenciadorEfeitos
+from src.ui.PauseMenu import PauseMenu
 
 class Engine:
     def __init__(self, tela):
@@ -14,108 +15,157 @@ class Engine:
         self.clock = pygame.time.Clock()
         self.running = True
         self.mostrar_grid = False
+        self.pausado = False
 
+        # Mundo
         self.mapa = Mapa(id_mapa=1, tile_size=100)
         self.cols = len(self.mapa.dados_mapa[0])
         self.lins = len(self.mapa.dados_mapa)
-        self.grid   = Grid(colunas=self.cols, linhas=self.lins, tile_size=100)
-        self.camera = Camera(colunas=self.cols, linhas=self.lins, tile_size=100, velocidade=12)
 
-        # necessario para renderizar o hud
-        largura_janela, altura_janela = self.screen.get_size()
-        self.hud = Hud(largura_janela, altura_janela)
+        self.grid = Grid(self.cols, self.lins, 100)
+        self.camera = Camera(self.cols, self.lins, 100, velocidade=12)
+
+        # HUD
+        largura, altura = self.screen.get_size()
+        self.hud = Hud(largura, altura)
         self.recursos = recursoHud(self.screen)
-        self.martelo = GerenciamentoHud(largura_janela, altura_janela, 60, "Martelo.png", "1", 1.5)
-        self.estatisticas = GerenciamentoHud(largura_janela-215, altura_janela+20, 45, "estatisticas.png", "2", 1.5)
-        self.lixo = GerenciamentoHud(largura_janela+215, altura_janela+20, 45, "lixo.png", "3", 0.9)
-        
-        self.sistema_construir = SistemaConstruir(self.cols, self.lins, self.grid, self.camera, self.screen, self.mapa)
+
+        self.martelo = GerenciamentoHud(largura, altura, 60, "Martelo.png", "1", 1.5)
+        self.estatisticas = GerenciamentoHud(largura-215, altura+20, 45, "estatisticas.png", "2", 1.5)
+        self.lixo = GerenciamentoHud(largura+215, altura+20, 45, "lixo.png", "3", 0.9)
+
+        # Construção
+        self.sistema_construir = SistemaConstruir(
+            self.cols, self.lins, self.grid, self.camera, self.screen, self.mapa
+        )
         self.construcoes_persistentes = []
 
-        # Iniciando os gereciadores de som
+        # Pause
+        self.pause_menu = PauseMenu(self.screen)
+
+        # Áudio
         self.efeitos = GerenciadorEfeitos()
         self.musica = GerenciadorMusica()
 
-    def start(self):
-        while self.running:
-            largura_janela, altura_janela = self.screen.get_size()
+    def handle_events(self):
+        largura, altura = self.screen.get_size()
 
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    self.running = False
-                if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-                    self.running = False
-                    self.musica.soundtrack("menu")
+        for event in pygame.event.get():
 
+            if event.type == pygame.QUIT:
+                self.running = False
+
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                self.pausado = not self.pausado
+
+            if self.pausado:
                 if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_g:
-                        self.mostrar_grid = not self.mostrar_grid
-                    if event.key == pygame.K_h:
-                        self.hud.toggle_controles()
-                    
-                    self.sistema_construir.handle_keydown(event)
-                    
-                
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    if event.button == 1: 
-                        mouse_pos = pygame.mouse.get_pos()
-                        pos_grid = self.grid.tela_para_grid(mouse_pos, self.camera.x, self.camera.y)
-                        
-                        self.sistema_construir.handle_mousebuttondown(event)
-        
-                    elif event.button == 3:
-                        self.sistema_construir.handle_mousebuttondown(event)
+                    self.pause_menu.navegar(event)
 
-                if event.type == pygame.MOUSEWHEEL:
-                    if event.y > 0:
-                        self.camera.zoom_in(largura_janela, altura_janela)
-                    else:
-                        self.camera.zoom_out(largura_janela, altura_janela)
+                    if event.key == pygame.K_RETURN:
+                        opcao = self.pause_menu.selecionar()
 
-            if self.camera.atualizar_zoom(largura_janela, altura_janela):
-                self.construcoes_persistentes = [c.to_dict() for c in self.sistema_construir.construcoes]
-                
-                self.mapa = Mapa(id_mapa=1, tile_size=self.camera.tile_size)
-                self.cols = len(self.mapa.dados_mapa[0])
-                self.lins = len(self.mapa.dados_mapa)
-                self.grid = Grid(colunas=self.cols, linhas=self.lins, tile_size=self.camera.tile_size)
-                self.camera = Camera(colunas=self.cols, linhas=self.lins, tile_size=self.camera.tile_size, velocidade=12)
-                self.sistema_construir = SistemaConstruir(self.cols, self.lins, self.grid, self.camera, self.screen, self.mapa)
-                
-                self.sistema_construir.construcoes = [
-                    Construcao.from_dict(data, self.camera.tile_size) 
-                    for data in self.construcoes_persistentes
-                ]
-                self.sistema_construir.atualizar_tile_size(self.camera.tile_size)
+                        if opcao == "Continuar":
+                            self.pausado = False
 
-            self.camera.mover_por_teclado(largura_janela, altura_janela)
-            self.camera.mover_por_mouse(largura_janela, altura_janela)
-            self.camera.coordenadas_mouse()
-            
-            if self.sistema_construir.modo_construcao:
-                self.hud.estado_hud = "construcao"
-            else:
-                self.hud.estado_hud = "controles"
+                        elif opcao == "Voltar ao menu":
+                            self.running = False
+                            self.musica.soundtrack("menu")
 
-            if self.sistema_construir.modo_construcao:
-                self.hud.estado_hud = "construcao"
-            else:
-                self.hud.estado_hud = "controles"
+                continue
 
-            # Renderização
-            self.screen.fill((20, 20, 20))
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_g:
+                    self.mostrar_grid = not self.mostrar_grid
 
-            # Renderização
-            self.screen.fill((20, 20, 20))
-            self.mapa.draw(self.screen, self.camera.x, self.camera.y)
-            self.sistema_construir.update()
-            if self.mostrar_grid:
-                self.grid.draw_debug(self.screen, self.camera.x, self.camera.y)
+                if event.key == pygame.K_h:
+                    self.hud.toggle_controles()
+
+                self.sistema_construir.handle_keydown(event)
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                self.sistema_construir.handle_mousebuttondown(event)
+
+            if event.type == pygame.MOUSEWHEEL:
+                if event.y > 0:
+                    self.camera.zoom_in(largura, altura)
+                else:
+                    self.camera.zoom_out(largura, altura)
+
+
+    # parte da lógica 
+    def update(self):
+        largura, altura = self.screen.get_size()
+
+        if self.pausado:
+            return  
+
+        self.camera.mover_por_teclado(largura, altura)
+        self.camera.mover_por_mouse(largura, altura)
+        self.camera.coordenadas_mouse()
+
+        # HUD 
+        if self.sistema_construir.modo_construcao:
+            self.hud.estado_hud = "construcao"
+        else:
+            self.hud.estado_hud = "controles"
+
+        # Zoom 
+        if self.camera.atualizar_zoom(largura, altura):
+            self.construcoes_persistentes = [
+                c.to_dict() for c in self.sistema_construir.construcoes
+            ]
+
+            self.mapa = Mapa(1, self.camera.tile_size)
+            self.cols = len(self.mapa.dados_mapa[0])
+            self.lins = len(self.mapa.dados_mapa)
+
+            self.grid = Grid(self.cols, self.lins, self.camera.tile_size)
+            self.camera = Camera(self.cols, self.lins, self.camera.tile_size, 12)
+
+            self.sistema_construir = SistemaConstruir(
+                self.cols, self.lins, self.grid, self.camera, self.screen, self.mapa
+            )
+
+            self.sistema_construir.construcoes = [
+                Construcao.from_dict(data, self.camera.tile_size)
+                for data in self.construcoes_persistentes
+            ]
+
+            self.sistema_construir.atualizar_tile_size(self.camera.tile_size)
+
+
+    # renderização
+    def draw(self):
+        self.screen.fill((20, 20, 20))
+
+        self.mapa.draw(self.screen, self.camera.x, self.camera.y)
+
+        self.sistema_construir.desenhar_construcoes()
+
+        if not self.pausado and self.sistema_construir.modo_construcao:
+            self.sistema_construir.desenhar_previa_construcao()
+
+        if self.mostrar_grid and not self.pausado:
+            self.grid.draw_debug(self.screen, self.camera.x, self.camera.y)
+
+        if not self.pausado:
             self.hud.desenhar(self.screen)
             self.recursos.exibir_recursos()
             self.martelo.desenhar_circulo(self.screen)
             self.estatisticas.desenhar_circulo(self.screen)
             self.lixo.desenhar_circulo(self.screen)
 
-            pygame.display.flip()
+        # menu de pause
+        if self.pausado:
+            self.pause_menu.desenhar()
+
+        pygame.display.flip()
+
+    # loop principal
+    def start(self):
+        while self.running:
+            self.handle_events()
+            self.update()
+            self.draw()
             self.clock.tick(60)
