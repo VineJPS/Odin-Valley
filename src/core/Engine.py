@@ -72,6 +72,18 @@ class Engine:
                             self.running = False
                             self.musica.soundtrack("menu")
 
+            # clicar no menu de pause
+            if self.pausado and event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:  
+                    opcao = self.pause_menu.clicar(pygame.mouse.get_pos())
+
+                    if opcao == "Continuar":
+                        self.pausado = False
+
+                    elif opcao == "Voltar ao menu":
+                        self.running = False
+                        self.musica.soundtrack("menu")
+
                 continue
 
             if event.type == pygame.KEYDOWN:
