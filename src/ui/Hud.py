@@ -148,10 +148,17 @@ class GerenciamentoHud:
 
         self.img_rect = self.imagem.get_rect(center=(self.pos_x, self.pos_y))
         
-        # 2. Configurar o Texto
+        # Configurando o Texto
         self.fonte = pygame.font.SysFont("Arial", 18, bold=False)
         self.texto_surf = self.fonte.render(letra, True, (0, 0, 0))
         self.texto_rect = self.texto_surf.get_rect(center=(self.pos_x, self.pos_y + self.raio - 15))
+
+    def gerenciamento_click(self, pos_mouse):
+        dx = pos_mouse[0] - self.pos_x
+        dy = pos_mouse[1] - self.pos_y
+
+        distancia = (dx**2 + dy**2) ** 0.5
+        return distancia <= self.raio
 
     def desenhar_circulo(self, tela):
         surf_circulo = pygame.Surface((self.raio*2, self.raio*2), pygame.SRCALPHA)
