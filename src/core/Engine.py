@@ -30,7 +30,7 @@ class Engine:
         self.hud = Hud(largura, altura)
         self.recursos = recursoHud(self.screen)
 
-        self.martelo = GerenciamentoHud(largura, altura, 60, "Martelo.png", "1", 1.5)
+        self.martelo = GerenciamentoHud(largura, altura, 60, "Martelo.png", "B", 1.5)
         self.estatisticas = GerenciamentoHud(largura-215, altura+20, 45, "estatisticas.png", "2", 1.5)
         self.lixo = GerenciamentoHud(largura+215, altura+20, 45, "lixo.png", "3", 0.9)
 
@@ -46,6 +46,7 @@ class Engine:
         # Áudio
         self.efeitos = GerenciadorEfeitos()
         self.musica = GerenciadorMusica()
+        self.musica.criar_playlist_aleatoria()
 
     def handle_events(self):
         largura, altura = self.screen.get_size()
@@ -82,6 +83,7 @@ class Engine:
 
                     elif opcao == "Voltar ao menu":
                         self.running = False
+                        self.musica.parar()
                         self.musica.soundtrack("menu")
 
                 continue
@@ -164,9 +166,9 @@ class Engine:
         if not self.pausado:
             self.hud.desenhar(self.screen)
             self.recursos.exibir_recursos()
-            self.martelo.desenhar_circulo(self.screen)
-            self.estatisticas.desenhar_circulo(self.screen)
-            self.lixo.desenhar_circulo(self.screen)
+            # self.martelo.desenhar_circulo(self.screen)
+            # self.estatisticas.desenhar_circulo(self.screen)
+            # self.lixo.desenhar_circulo(self.screen)
 
         # menu de pause
         if self.pausado:
@@ -181,3 +183,4 @@ class Engine:
             self.update()
             self.draw()
             self.clock.tick(60)
+            self.musica.atualizar()

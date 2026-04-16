@@ -17,6 +17,7 @@ def main():
     # Iniciando os gerenciadores de som
     efeitos = GerenciadorEfeitos()
     musica = GerenciadorMusica()
+    musica.criar_playlist_aleatoria() #playlist aleatoria
 
     # Iniciando a Musica do Menu
     musica.soundtrack("menu")
@@ -65,7 +66,7 @@ def main():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if btn_start.collidepoint(mouse):
                     efeitos.tocar("clique")
-                    musica.soundtrack("song1")
+                    musica.parar()
                     # Instancia e inicia a Engine apenas ao clicar em Start
                     meu_app = Engine(tela) 
                     meu_app.start()
