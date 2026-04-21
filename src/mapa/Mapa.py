@@ -33,13 +33,19 @@ class Mapa:
         return biblioteca
 
     def draw(self, superficie, cam_x, cam_y):
+        tile_size_int = int(self.tile_size)
         largura_t, altura_t = superficie.get_size()
 
         for l_idx, linha in enumerate(self.dados_mapa):
             for c_idx, id_tile in enumerate(linha):
-                x = (c_idx * self.tile_size) - cam_x
-                y = (l_idx * self.tile_size) - cam_y
-                
-                # Culling (Desenha apenas o visível)
-                if -self.tile_size < x < largura_t and -self.tile_size < y < altura_t:
-                    superficie.blit(self.tiles.get(id_tile), (x, y))
+
+                x = int(c_idx * tile_size_int - cam_x)
+                y = int(l_idx * tile_size_int - cam_y)
+
+                if x < -self.tile_size or y < -self.tile_size:
+                    continue
+                if x > largura_t or y > altura_t:
+                    continue
+
+                tile = self.tiles.get(id_tile)
+                superficie.blit(tile, (x, y))
