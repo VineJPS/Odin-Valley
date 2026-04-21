@@ -126,27 +126,11 @@ class Engine:
 
         # Zoom 
         if self.camera.atualizar_zoom(largura, altura):
-            self.construcoes_persistentes = [
-                c.to_dict() for c in self.sistema_construir.construcoes
-            ]
+            novo_tile = self.camera.tile_size
 
-            self.mapa = Mapa(1, self.camera.tile_size)
-            self.cols = len(self.mapa.dados_mapa[0])
-            self.lins = len(self.mapa.dados_mapa)
-
-            self.grid = Grid(self.cols, self.lins, self.camera.tile_size)
-            self.camera = Camera(self.cols, self.lins, self.camera.tile_size, 12)
-
-            self.sistema_construir = SistemaConstruir(
-                self.cols, self.lins, self.grid, self.camera, self.screen, self.mapa
-            )
-
-            self.sistema_construir.construcoes = [
-                Construcao.from_dict(data, self.camera.tile_size)
-                for data in self.construcoes_persistentes
-            ]
-
-            self.sistema_construir.atualizar_tile_size(self.camera.tile_size)
+            self.mapa.tile_size = novo_tile
+            self.grid.tile_size = novo_tile
+            self.sistema_construir.atualizar_tile_size(novo_tile)
 
 
     # renderização
