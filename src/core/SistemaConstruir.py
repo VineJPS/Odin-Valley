@@ -40,7 +40,7 @@ class SistemaConstruir:
         pos_grid = self.grid.tela_para_grid(mouse_pos, self.camera.x, self.camera.y)
         
         if pos_grid:
-            print(f"Mouse click at grid pos: {pos_grid}")  # Debug coord
+            # print(f"Mouse click at grid pos: {pos_grid}")  # Debug coord
             if event.button == 1: 
                 if self.modo_construcao:
                     if not self.tem_construcao(pos_grid):
@@ -77,7 +77,7 @@ class SistemaConstruir:
         if 0 <= x < self.cols and 0 <= y < self.lins:
             try:
                 id_tile = self.mapa.dados_mapa[y][x]
-                print(f"Grid {pos_grid}: tile_id={id_tile}, water?={id_tile==3}, has_build?={self.tem_construcao(pos_grid)}")  # Debug
+                print(f"Grid {pos_grid}: tile_id={id_tile}, water?={id_tile==3}, has_build?={self.tem_construcao(pos_grid)}")  #
             except IndexError as e:
                 print(f"IndexError at {pos_grid}: {e}")
                 return False
@@ -86,7 +86,7 @@ class SistemaConstruir:
                 nova_construcao = Construcao(
                     self.tipo_construcao_atual,
                     pos_grid,
-                    self.camera.tile_size  # float ok now
+                    self.camera.tile_size  
                 )
                 self.construcoes.append(nova_construcao)
                 print(f"Built {self.tipo_construcao_atual} at {pos_grid}")
