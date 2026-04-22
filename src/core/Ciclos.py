@@ -4,8 +4,8 @@ class Ciclos:
     def __init__(self):
         self.tempo_ficticio = 0.0  # Tempo total pausável em ms (para dias)
         self.tempo_decorrido_ciclo = 0.0
-        self.duracao_dia = 18000  # 5 minutos em ms
-        self.duracao_noite = 18000  # 3 minutos em ms
+        self.duracao_dia = 18000  # minutos em ms
+        self.duracao_noite = 18000  # minutos em ms
         self.estado_atual = 'dia'
         self.progresso = 0.0
         self.dia_atual = 1
@@ -20,16 +20,26 @@ class Ciclos:
 
         self.tempo_ficticio += dt
         hora_decimal = self.get_hora_decimal()
-        self.progresso = (abs(hora_decimal - 12) / 6) ** 2 * 0.8  # Pico escuro meia-noite, suave transição
-
-        if 6 <= hora_decimal < 18:
+        
+        # Transições precisas: amanhecer 6h (fade até 7h dia total), anoitecer 18h (fade até 19h noite total)
+        if 6 <= hora_decimal < 7:
+            prog = (hora_decimal - 6) / 1.0  # 0 (6h escuro) → 1 (7h claro)
+            self.estado_atual = 'dia'
+            self.cor_ceu = self.cor_ceu_dia
+            self.progresso = 1 - prog  # Inverso para fade in
+        elif 7 <= hora_decimal < 18:
             self.estado_atual = 'dia'
             self.cor_ceu = self.cor_ceu_dia
             self.progresso = 0.0
-        else:
+        elif 18 <= hora_decimal < 19:
+            prog = (hora_decimal - 18) / 1.0  # 0 (18h claro) → 1 (19h escuro)
             self.estado_atual = 'noite'
             self.cor_ceu = self.cor_ceu_noite
-            self.progresso = ((hora_decimal - 18) % 24) / 12  # 0-1 suave noite
+            self.progresso = prog
+        else:  # 19h-6h noite total ou antes 6h
+            self.estado_atual = 'noite'
+            self.cor_ceu = self.cor_ceu_noite
+            self.progresso = 1.0
 
     def get_hora_decimal(self):
         ciclo_total = self.duracao_dia + self.duracao_noite

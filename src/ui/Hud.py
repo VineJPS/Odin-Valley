@@ -34,7 +34,7 @@ class Hud:
         # Painel top-right: Dia X - HH:MM (estado)
         tempo_str = ciclos.get_tempo_hh_mm()
         dia_str = f"Dia {ciclos.dia_atual} - {tempo_str}"
-        estado_emoji = "🌙" if ciclos.is_noite() else "☀️"
+        estado_emoji = "[Lua]" if ciclos.is_noite() else "[Sol]"
         texto_completo = f"{estado_emoji} {dia_str}"
 
         cor_texto = (255, 255, 255) if not ciclos.is_noite() else (200, 200, 255)
