@@ -107,6 +107,12 @@ class recursoHud:
             {"nome": "Ouro", "valor": 100, "cor": (254, 198, 2),  "img": pygame.transform.scale(pygame.image.load("assets/img/icones/ouro.png"), (self.tamanho_img, self.tamanho_img))},
         ]
 
+    def atualizar_recursos(self, recursos_dict):
+        nome_to_key = {'Madeira': 'madeira', 'Pedra': 'pedra', 'Comida': 'comida', 'Ouro': 'ouro', 'Pessoas': 'pessoas'}
+        for item in self.elementos:
+            key = nome_to_key.get(item['nome'], item['nome'].lower())
+            item['valor'] = recursos_dict.get(key, 0)
+
     def exibir_recursos(self):
         total_elementos = len(self.elementos)
         altura_total_hud = (self.altura_box + self.espacamento) * total_elementos
