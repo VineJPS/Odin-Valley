@@ -33,12 +33,15 @@ class Mapa:
         return biblioteca
 
     def draw(self, superficie, cam_x, cam_y):
+        self.draw_with_night_effect(superficie, cam_x, cam_y, False, 0.0)
+
+    def draw_with_night_effect(self, superficie, cam_x, cam_y, is_noite, alpha_sombra):
+        # Desenha mapa normal primeiro
         tile_size_int = int(self.tile_size)
         largura_t, altura_t = superficie.get_size()
 
         for l_idx, linha in enumerate(self.dados_mapa):
             for c_idx, id_tile in enumerate(linha):
-
                 x = int(c_idx * tile_size_int - cam_x)
                 y = int(l_idx * tile_size_int - cam_y)
 
@@ -49,3 +52,10 @@ class Mapa:
 
                 tile = self.tiles.get(id_tile)
                 superficie.blit(tile, (x, y))
+
+        # Overlay sombra se noite
+        if is_noite and alpha_sombra > 0:
+            overlay = pygame.Surface((largura_t, altura_t), pygame.SRCALPHA)
+            sombra_cor = (*[0]*3, int(255 * alpha_sombra))  # Preto com alpha gradual
+            overlay.fill(sombra_cor)
+            superficie.blit(overlay, (0, 0))

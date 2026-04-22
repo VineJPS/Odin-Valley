@@ -8,6 +8,7 @@ from src.core.SistemaConstruir import SistemaConstruir
 from src.audio.SoundTrack import GerenciadorMusica
 from src.audio.Efeitos import GerenciadorEfeitos
 from src.ui.PauseMenu import PauseMenu
+from src.core.Ciclos import Ciclos
 
 class Engine:
     def __init__(self, tela):
@@ -47,6 +48,7 @@ class Engine:
         self.efeitos = GerenciadorEfeitos()
         self.musica = GerenciadorMusica()
         self.musica.criar_playlist_aleatoria()
+        self.ciclos = Ciclos()
 
     def handle_events(self):
         largura, altura = self.screen.get_size()
@@ -110,13 +112,16 @@ class Engine:
     # parte da lógica 
     def update(self):
         largura, altura = self.screen.get_size()
+        dt = self.clock.get_time()
 
-        if self.pausado:
-            return  
-
-        self.camera.mover_por_teclado(largura, altura)
-        self.camera.mover_por_mouse(largura, altura)
-        self.camera.coordenadas_mouse()
+        if not self.pausado:
+            self.ciclos.update(dt, self.pausado)
+            self.camera.mover_por_teclado(largura, altura)
+            self.camera.mover_por_mouse(largura, altura)
+            self.camera.coordenadas_mouse()
+        else:
+            # Pausa câmera também
+            pass
 
         # HUD 
         if self.sistema_construir.modo_construcao:
@@ -135,9 +140,9 @@ class Engine:
 
     # renderização
     def draw(self):
-        self.screen.fill((20, 20, 20))
+        self.screen.fill(self.ciclos.cor_ceu)
 
-        self.mapa.draw(self.screen, self.camera.x, self.camera.y)
+        self.mapa.draw_with_night_effect(self.screen, self.camera.x, self.camera.y, self.ciclos.is_noite(), self.ciclos.get_alpha_sombra())
 
         self.sistema_construir.desenhar_construcoes()
 
@@ -150,6 +155,7 @@ class Engine:
         if not self.pausado:
             self.hud.desenhar(self.screen)
             self.recursos.exibir_recursos()
+            self.hud.desenhar_tempo(self.screen, self.ciclos)
             # self.martelo.desenhar_circulo(self.screen)
             # self.estatisticas.desenhar_circulo(self.screen)
             # self.lixo.desenhar_circulo(self.screen)

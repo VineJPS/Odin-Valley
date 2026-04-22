@@ -10,8 +10,9 @@ class Hud:
         self.screen_height = screen_height
         self.estado_hud = Hud.MODO_CONTROLES
         
-        # fonte do textp
+        # fontes
         self.fonte_controles = pygame.font.Font(None, 24)
+        self.fonte_tempo = pygame.font.Font(None, 36)
         
         # Cores
         self.Branco = (255, 255, 255)
@@ -28,6 +29,26 @@ class Hud:
         
         elif self.estado_hud == Hud.MODO_CONSTRUCAO:
             self._desenhar_controles_construcao(screen)
+
+    def desenhar_tempo(self, screen, ciclos):
+        # Painel top-right: Dia X - HH:MM (estado)
+        tempo_str = ciclos.get_tempo_hh_mm()
+        dia_str = f"Dia {ciclos.dia_atual} - {tempo_str}"
+        estado_emoji = "[Lua]" if ciclos.is_noite() else "[Sol]"
+        texto_completo = f"{estado_emoji} {dia_str}"
+
+        cor_texto = (255, 255, 255) if not ciclos.is_noite() else (200, 200, 255)
+        
+        surf = self.fonte_tempo.render(texto_completo, True, cor_texto)
+        larg, alt = surf.get_size()
+        pos_x = self.screen_width - larg - 20
+        pos_y = 20
+        
+        # Fundo semi-transparente
+        bg_surf = pygame.Surface((larg + 20, alt + 10), pygame.SRCALPHA)
+        pygame.draw.rect(bg_surf, (0, 0, 0, 128), bg_surf.get_rect(), border_radius=10)
+        screen.blit(bg_surf, (pos_x - 10, pos_y - 5))
+        screen.blit(surf, (pos_x, pos_y))
     
     #Hud dos controles
     def _desenhar_menu_controles(self, screen):
