@@ -41,6 +41,11 @@ class Engine:
         )
         self.construcoes_persistentes = []
 
+        # Recursos
+        from src.construcao.Recursos import GerenciadorRecursos
+        self.ciclos = Ciclos()
+        self.recursos_gerenciador = GerenciadorRecursos(self.sistema_construir, self.ciclos)
+
         # Pause
         self.pause_menu = PauseMenu(self.screen)
 
@@ -48,7 +53,6 @@ class Engine:
         self.efeitos = GerenciadorEfeitos()
         self.musica = GerenciadorMusica()
         self.musica.criar_playlist_aleatoria()
-        self.ciclos = Ciclos()
 
     def handle_events(self):
         largura, altura = self.screen.get_size()
@@ -116,6 +120,12 @@ class Engine:
 
         if not self.pausado:
             self.ciclos.update(dt, self.pausado)
+            self.recursos_gerenciador.update(dt)
+            self.recursos.atualizar_recursos(self.recursos_gerenciador.get_recursos())
+            self.recursos.elementos[0]['valor'] = int(self.recursos.elementos[0]['valor'])  # Floor pra int HUD
+            self.recursos.elementos[1]['valor'] = int(self.recursos.elementos[1]['valor'])
+            self.recursos.elementos[2]['valor'] = int(self.recursos.elementos[2]['valor'])
+            self.recursos.elementos[3]['valor'] = int(self.recursos.elementos[3]['valor'])
             self.camera.mover_por_teclado(largura, altura)
             self.camera.mover_por_mouse(largura, altura)
             self.camera.coordenadas_mouse()

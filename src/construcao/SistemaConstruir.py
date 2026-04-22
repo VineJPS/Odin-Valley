@@ -129,6 +129,15 @@ class SistemaConstruir:
             
             self.screen.blit(surface, (x, y))
 
+    def get_construcoes_por_tipo(self):
+        counts = {}
+        for c in self.tipos_disponiveis:
+            counts[c] = 0
+        for construcao in self.construcoes:
+            if construcao.tipo in counts:
+                counts[construcao.tipo] += 1
+        return counts
+
     def update(self):
         self.desenhar_construcoes()
         if self.modo_construcao:
