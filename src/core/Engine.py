@@ -3,8 +3,8 @@ from src.mapa.Mapa import Mapa
 from src.mapa.Grid import Grid
 from src.core.Camera import Camera
 from src.ui.Hud import Hud, GerenciamentoHud, recursoHud
-from src.core.Construcao import Construcao
-from src.core.SistemaConstruir import SistemaConstruir
+from src.construcao.Construcao import Construcao
+from src.construcao.SistemaConstruir import SistemaConstruir
 from src.audio.SoundTrack import GerenciadorMusica
 from src.audio.Efeitos import GerenciadorEfeitos
 from src.ui.PauseMenu import PauseMenu

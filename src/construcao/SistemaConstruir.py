@@ -1,5 +1,5 @@
 import pygame
-from src.core.Construcao import Construcao
+from .Construcao import Construcao
 from src.mapa.Mapa import Mapa
 
 class SistemaConstruir:
@@ -133,4 +133,3 @@ class SistemaConstruir:
         self.desenhar_construcoes()
         if self.modo_construcao:
             self.desenhar_previa_construcao()
-
