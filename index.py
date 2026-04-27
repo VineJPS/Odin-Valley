@@ -23,7 +23,7 @@ def main():
     musica.soundtrack("menu")
 
     # Adicionando o background do menu
-    bg = pygame.image.load("assets/img/background.png").convert()
+    bg = pygame.image.load("assets/img/background/menu.png").convert()
     bg = pygame.transform.scale(bg, resolucao_nativa)
 
     
