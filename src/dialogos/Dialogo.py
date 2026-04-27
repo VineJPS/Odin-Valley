@@ -1,0 +1,1 @@
+# Criação do Gerenciador de dialogos
