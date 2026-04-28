@@ -16,6 +16,19 @@ class SistemaConstruir:
         self.tipo_construcao_atual = 'residencial'
         self.tipos_disponiveis = ['residencial', 'serraria', 'mina', 'pesca']
         self.indice_tipo_atual = 0
+        self.imagens_previa = {
+            'residencial': pygame.image.load("assets/img/sprites/construcao/Casa.png").convert_alpha(),
+            # 'serraria': pygame.image.load("assets/img/sprites/construcao/...").convert_alpha(),
+            # 'mina': pygame.image.load("assets/img/sprites/construcao/...").convert_alpha(),
+            # 'pesca': pygame.image.load("assets/img/sprites/construcao/...").convert_alpha(),
+        }
+        self.cores_previa = {
+            'residencial': (255, 0, 0, 120),
+            'serraria': (200, 150, 100, 120),
+            'mina': (137, 137, 137, 120),
+            'pesca': (100, 150, 200, 120)
+        }
+        self.cache_previa = {}
 
     def handle_keydown(self, event):
         if event.key == pygame.K_b:
@@ -45,9 +58,9 @@ class SistemaConstruir:
                 if self.modo_construcao:
                     if not self.tem_construcao(pos_grid):
                         success = self.construir(pos_grid)
-                        print(f"Build {'success' if success else 'failed'} at {pos_grid}")
+                        # print(f"Construção {'cosntruida com sucesso' if success else 'falha na parte de construção'} at {pos_grid}")
                     else:
-                        print(f"Already building at {pos_grid}")
+                        # print(f"já existe uma construção em {pos_grid}")
                         self.grid.selecionar_celula(mouse_pos, self.camera.x, self.camera.y)
                 else:
                     self.grid.selecionar_celula(mouse_pos, self.camera.x, self.camera.y)
@@ -77,9 +90,9 @@ class SistemaConstruir:
         if 0 <= x < self.cols and 0 <= y < self.lins:
             try:
                 id_tile = self.mapa.dados_mapa[y][x]
-                print(f"Grid {pos_grid}: tile_id={id_tile}, water?={id_tile==3}, has_build?={self.tem_construcao(pos_grid)}")  #
+                # print(f"Grid {pos_grid}: tile_id={id_tile}, water?={id_tile==3}, has_build?={self.tem_construcao(pos_grid)}")  #
             except IndexError as e:
-                print(f"IndexError at {pos_grid}: {e}")
+                # print(f"IndexError at {pos_grid}: {e}")
                 return False
 
             if not self.tem_construcao(pos_grid) and id_tile != 3:
@@ -89,7 +102,7 @@ class SistemaConstruir:
                     self.camera.tile_size  
                 )
                 self.construcoes.append(nova_construcao)
-                print(f"Built {self.tipo_construcao_atual} at {pos_grid}")
+                # print(f"Construido: {self.tipo_construcao_atual} at {pos_grid}")
                 return True 
 
         return False
@@ -98,7 +111,6 @@ class SistemaConstruir:
         construcao = self.get_construcao(pos_grid)
         if construcao:
             self.construcoes.remove(construcao)
-            print("")
             return True
         return False
     
@@ -109,25 +121,44 @@ class SistemaConstruir:
     def desenhar_previa_construcao(self):
         mouse_pos = pygame.mouse.get_pos()
         pos_grid = self.grid.tela_para_grid(mouse_pos, self.camera.x, self.camera.y)
-        
+
         if pos_grid and not self.tem_construcao(pos_grid):
-            x = round(pos_grid[0] * self.camera.tile_size) - self.camera.x
-            y = round(pos_grid[1] * self.camera.tile_size) - self.camera.y
-            
-            surface = pygame.Surface((self.camera.tile_size, self.camera.tile_size), pygame.SRCALPHA)
-            
-            cores_previa = {
-                'residencial': (255, 0, 0, 128),       
-                'serraria': (200, 150, 100, 128),      
-                'mina': (137, 137, 137, 128),          
-                'pesca': (100, 150, 200, 128)           
-            }
-            
-            cor = cores_previa.get(self.tipo_construcao_atual, (200, 200, 200, 128))
-            surface.fill(cor)
-            pygame.draw.rect(surface, (255, 255, 0), (0, 0, self.camera.tile_size, self.camera.tile_size), 2)
-            
-            self.screen.blit(surface, (x, y))
+            x = int(pos_grid[0] * self.camera.tile_size - self.camera.x)
+            y = int(pos_grid[1] * self.camera.tile_size - self.camera.y)
+
+            imagem = self.imagens_previa.get(self.tipo_construcao_atual)
+
+            if imagem:
+                key = (self.tipo_construcao_atual, self.camera.tile_size)
+
+                if key not in self.imagens_previa:
+                    img = self.imagens_previa[self.tipo_construcao_atual]
+                    self.imagens_previa[key] = pygame.transform.scale(
+                        img, (self.camera.tile_size, self.camera.tile_size)
+                    )
+
+                img_escalada = self.imagens_previa[key]
+                img_escalada.set_alpha(150)
+                self.screen.blit(img_escalada, (x, y))
+
+            # caso a imagem falhe
+            else:
+                cor = self.cores_previa.get(self.tipo_construcao_atual, (200, 200, 200, 120))
+
+                surface = pygame.Surface(
+                    (int(self.camera.tile_size), int(self.camera.tile_size)),
+                    pygame.SRCALPHA
+                )
+                surface.fill(cor)
+
+                self.screen.blit(surface, (x, y))
+
+            pygame.draw.rect(
+                self.screen,
+                (255, 255, 0),
+                (x, y, int(self.camera.tile_size), int(self.camera.tile_size)),
+                2
+            )
 
     def get_construcoes_por_tipo(self):
         counts = {}
