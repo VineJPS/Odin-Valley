@@ -9,6 +9,7 @@ class Hud:
         self.screen_width = screen_width
         self.screen_height = screen_height
         self.estado_hud = Hud.MODO_CONTROLES
+        self.mostrar_controles = True
         
         # fontes
         self.fonte_controles = pygame.font.Font(None, 24)
@@ -17,11 +18,15 @@ class Hud:
         # Cores
         self.Branco = (255, 255, 255)
         
-    def toggle_controles(self):
+    def trocar_controles(self):
         if self.estado_hud == Hud.MODO_CONTROLES:
             self.estado_hud = Hud.MODO_CONSTRUCAO
         else:
             self.estado_hud = Hud.MODO_CONTROLES
+    
+    def toggle_controles(self):
+        self.mostrar_controles = not self.mostrar_controles
+
     
     def desenhar(self, screen):
         if self.estado_hud == Hud.MODO_CONTROLES:
@@ -52,39 +57,41 @@ class Hud:
     
     #Hud dos controles
     def _desenhar_menu_controles(self, screen):
-        y_offset = 10
-        
-        textos = [
-            ("CONTROLES BÁSICOS:", self.Branco),
-            ("WASD / SETAS ou mouse - movimentar camera", self.Branco),
-            ("G - Mostrar/Esconder grid", self.Branco),
-            ("H - Mostrar/Esconder controles", self.Branco),
-            ("B - alternar entre o modo de contrução/visualização ", self.Branco),
-            ("ESC - voltar para o menu principal", self.Branco),
-        ]
-        
-        for texto, cor in textos:
-            superficie = self.fonte_controles.render(texto, True, cor)
-            screen.blit(superficie, (10, y_offset))
-            y_offset += 25
+        if self.mostrar_controles:
+            y_offset = 10
+            
+            textos = [
+                ("CONTROLES BÁSICOS:", self.Branco),
+                ("WASD / SETAS ou mouse - movimentar camera", self.Branco),
+                ("G - Mostrar/Esconder grid", self.Branco),
+                ("H - Mostrar/Esconder controles", self.Branco),
+                ("B - alternar entre o modo de contrução/visualização ", self.Branco),
+                ("ESC - voltar para o menu principal", self.Branco),
+            ]
+            
+            for texto, cor in textos:
+                superficie = self.fonte_controles.render(texto, True, cor)
+                screen.blit(superficie, (10, y_offset))
+                y_offset += 25
 
     #Hud das contruções (ainda não implementado)
     def _desenhar_controles_construcao(self, screen):
-        y_offset = 10
-        
-        controles = [
-            ("CONTROLES DO MODO CONSTRUÇÃO:", self.Branco),
-            ("1,2,3,4 - Selecionar tipo de construção", self.Branco),
-            ("Clique Esquerdo - Construir", self.Branco),
-            ("Clique Direito - Remover construção", self.Branco),
-            ("B - alternar entre o modo de contrução/visualização", self.Branco),
-            ("ESC - voltar para o menu principal", self.Branco)
-        ]
-        
-        for texto, cor in controles:
-            superficie = self.fonte_controles.render(texto, True, cor)
-            screen.blit(superficie, (10, y_offset))
-            y_offset += 25
+        if self.mostrar_controles:
+            y_offset = 10
+            
+            controles = [
+                ("CONTROLES DO MODO CONSTRUÇÃO:", self.Branco),
+                ("1,2,3,4 - Selecionar tipo de construção", self.Branco),
+                ("Clique Esquerdo - Construir", self.Branco),
+                ("Clique Direito - Remover construção", self.Branco),
+                ("B - alternar entre o modo de contrução/visualização", self.Branco),
+                ("ESC - voltar para o menu principal", self.Branco)
+            ]
+            
+            for texto, cor in controles:
+                superficie = self.fonte_controles.render(texto, True, cor)
+                screen.blit(superficie, (10, y_offset))
+                y_offset += 25
 
 
 # Hud dos Recursos
