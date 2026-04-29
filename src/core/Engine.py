@@ -59,6 +59,18 @@ class Engine:
 
         for event in pygame.event.get():
 
+            def handle_mousebuttondown(self, event):
+                if event.type != pygame.MOUSEBUTTONDOWN:
+                    return
+
+                mouse_pos = pygame.mouse.get_pos()
+                pos_grid = self.grid.tela_para_grid(mouse_pos, self.camera.x, self.camera.y)
+
+                if pos_grid:
+                    if event.button == 1:
+                            if self.modo_construcao:
+                                self.construir(pos_grid)
+
             if event.type == pygame.QUIT:
                 self.running = False
 
@@ -91,7 +103,7 @@ class Engine:
                         self.running = False
                         self.musica.parar()
                         self.musica.soundtrack("menu")
-
+ 
                 continue
 
             if event.type == pygame.KEYDOWN:
@@ -104,6 +116,13 @@ class Engine:
                 self.sistema_construir.handle_keydown(event)
 
             if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    mouse_pos = pygame.mouse.get_pos()
+
+                    if self.martelo.gerenciamento_click(mouse_pos):
+                        self.sistema_construir.modo_construcao = not self.sistema_construir.modo_construcao
+                        return
+
                 self.sistema_construir.handle_mousebuttondown(event)
 
             if event.type == pygame.MOUSEWHEEL:
@@ -166,9 +185,9 @@ class Engine:
             self.hud.desenhar(self.screen)
             self.recursos.exibir_recursos()
             self.hud.desenhar_tempo(self.screen, self.ciclos)
-            # self.martelo.desenhar_circulo(self.screen)
-            # self.estatisticas.desenhar_circulo(self.screen)
-            # self.lixo.desenhar_circulo(self.screen)
+            self.martelo.desenhar_circulo(self.screen)
+            self.estatisticas.desenhar_circulo(self.screen)
+            self.lixo.desenhar_circulo(self.screen)
 
         # menu de pause
         if self.pausado:
