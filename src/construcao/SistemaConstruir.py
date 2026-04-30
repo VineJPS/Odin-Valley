@@ -33,7 +33,7 @@ class SistemaConstruir:
     def handle_keydown(self, event):
         if event.key == pygame.K_b:
             self.modo_construcao = not self.modo_construcao
-            print(f"Modo {'CONSTRUÇÃO' if self.modo_construcao else 'SELEÇÃO'}")
+            # print(f"Modo {'CONSTRUÇÃO' if self.modo_construcao else 'SELEÇÃO'}")
         
         if event.key == pygame.K_1:
             self.tipo_construcao_atual = 'residencial'
