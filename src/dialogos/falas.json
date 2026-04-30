@@ -1,0 +1,41 @@
+{
+    "cena_inicial": [
+        {
+            "nome": "Odin",
+            "sprite": "assets/img/sprites/personagem/odin/Odin-respirando",
+            "texto": "Rapaz, eu vi o que cê tava fazendo lá viu... parecia até missão stealth, mas nível iniciante."
+        },
+        {
+            "nome": "Odin",
+            "sprite": "assets/img/sprites/personagem/odin/Odin-respirando",
+            "texto": "Se fosse Dark Souls, você já tinha aparecido com 'YOU DIED' na tela faz tempo."
+        },
+        {
+            "nome": "Odin",
+            "sprite": "assets/img/sprites/personagem/odin/Odin-respirando",
+            "texto": "E essa estratégia aí? Nem NPC de Skyrim cairia nisso."
+        },
+        {
+            "nome": "Odin",
+            "sprite": "assets/img/sprites/personagem/odin/Odin-respirando",
+            "texto": "Parecia speedrun... só que ao contrário, demorando mais que o normal."
+        },
+        {
+            "nome": "Odin",
+            "sprite": "assets/img/sprites/personagem/odin/Odin-respirando",
+            "texto": "Mas relaxa, todo mundo começa assim... até o cara do tutorial do Minecraft já foi perdido um dia."
+        },
+        {
+            "nome": "Odin",
+            "sprite": "assets/img/sprites/personagem/odin/Odin-respirando",
+            "texto": "Até poderia fazer mais coisas, mas os programadores estavam com preguiça kkk"
+        }
+    ],
+    "construcao": [
+        {
+            "nome": "Odin",
+            "sprite": "assets/img/sprites/personagem/odin/Odin-respirando",
+            "texto": "Modo construção"
+        }
+    ]
+}
