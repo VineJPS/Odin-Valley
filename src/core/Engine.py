@@ -3,6 +3,7 @@ from src.mapa.Mapa import Mapa
 from src.mapa.Grid import Grid
 from src.core.Camera import Camera
 from src.ui.Hud import Hud, GerenciamentoHud, recursoHud
+from src.dialogos.Dialogo import DialogueSystem
 from src.construcao.Construcao import Construcao
 from src.construcao.SistemaConstruir import SistemaConstruir
 from src.audio.SoundTrack import GerenciadorMusica
@@ -19,7 +20,7 @@ class Engine:
         self.pausado = False
 
         # Mundo
-        self.mapa = Mapa(id_mapa=1, tile_size=100)
+        self.mapa = Mapa(id_mapa=3, tile_size=100)
         self.cols = len(self.mapa.dados_mapa[0])
         self.lins = len(self.mapa.dados_mapa)
 
@@ -34,6 +35,10 @@ class Engine:
         self.martelo = GerenciamentoHud(largura, altura, 60, "Martelo.png", "B", 1.5)
         self.estatisticas = GerenciamentoHud(largura-215, altura+20, 45, "estatisticas.png", "2", 1.5)
         self.lixo = GerenciamentoHud(largura+215, altura+20, 45, "lixo.png", "3", 0.9)
+
+        # Dialogos
+        self.dialogo = DialogueSystem(self.screen, largura, altura)
+        self.dialogo.load_dialogue('falas.json', 'cena_inicial')
 
         # Construção
         self.sistema_construir = SistemaConstruir(
@@ -73,6 +78,10 @@ class Engine:
 
             if event.type == pygame.QUIT:
                 self.running = False
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE and self.dialogo.active:
+                    self.dialogo.next_message()
 
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 self.pausado = not self.pausado
@@ -181,13 +190,17 @@ class Engine:
         if self.mostrar_grid and not self.pausado:
             self.grid.draw_debug(self.screen, self.camera.x, self.camera.y)
 
-        if not self.pausado:
+        if (not self.pausado) & (not self.dialogo.active):
             self.hud.desenhar(self.screen)
             self.recursos.exibir_recursos()
             self.hud.desenhar_tempo(self.screen, self.ciclos)
             self.martelo.desenhar_circulo(self.screen)
-            self.estatisticas.desenhar_circulo(self.screen)
-            self.lixo.desenhar_circulo(self.screen)
+            # self.estatisticas.desenhar_circulo(self.screen)
+            # self.lixo.desenhar_circulo(self.screen)
+
+        # Quando o dialogo fica ativo
+        if self.dialogo.active:
+            self.dialogo.draw()
 
         # menu de pause
         if self.pausado:
