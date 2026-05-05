@@ -31,6 +31,7 @@ def main():
     while True:
         # Deixando o background atras de todos elemento na tela
         tela.blit(bg, (0, 0))
+        tem_save = SaveManager.existe_save()
 
         mouse = pygame.mouse.get_pos()
         
@@ -46,24 +47,25 @@ def main():
         btn_option.center = (info.current_w//2,info.current_h//2+250)
         btn_exit.center = (info.current_w//2,info.current_h//2+350)
 
-        # Desenha Botão Start
+        # Desenha Botão Iniciar
         pygame.draw.rect(tela, (255, 140, 58), btn_start, border_radius=10)
-        txt_start = fonte.render("Start", True, (255, 255, 255))
+        txt_start = fonte.render("Iniciar", True, (255, 255, 255))
         tela.blit(txt_start, txt_start.get_rect(center=btn_start.center))
 
-        # Desenha o botão de load
-        pygame.draw.rect(tela, (255, 140, 58), btn_load, border_radius=10)
-        txt_option = fonte.render("Load", True, (255, 255, 255))
-        tela.blit(txt_option, txt_option.get_rect(center=btn_load.center))
+        # Desenha o botão de carregar
+        cor_load = (255, 140, 58) if tem_save else (100, 100, 100)
+        pygame.draw.rect(tela, cor_load, btn_load, border_radius=10)
+        txt_load = fonte.render("Carregar", True, (255, 255, 255))
+        tela.blit(txt_load, txt_load.get_rect(center=btn_load.center))
 
-        # Desenha Botão Option
+        # Desenha Botão Opções
         pygame.draw.rect(tela, (255, 140, 58), btn_option, border_radius=10)
-        txt_option = fonte.render("Option", True, (255, 255, 255))
+        txt_option = fonte.render("Opções", True, (255, 255, 255))
         tela.blit(txt_option, txt_option.get_rect(center=btn_option.center))
 
-        # Desenha Botão Exit
+        # Desenha Botão Sair
         pygame.draw.rect(tela, (255, 140, 58), btn_exit, border_radius=10)
-        txt_exit = fonte.render("Exit", True, (255, 255, 255))
+        txt_exit = fonte.render("Sair", True, (255, 255, 255))
         tela.blit(txt_exit, txt_exit.get_rect(center=btn_exit.center))
 
         for event in pygame.event.get():
@@ -78,7 +80,7 @@ def main():
                     # Instancia e inicia a Engine apenas ao clicar em Start
                     meu_app = Engine(tela) 
                     meu_app.start()
-                if btn_load.collidepoint(mouse):
+                if tem_save and btn_load.collidepoint(mouse):
                     efeitos.tocar("clique")
                     musica.parar()
 

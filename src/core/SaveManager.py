@@ -5,6 +5,11 @@ class SaveManager:
     SAVE_PATH = "savegame.json"
 
     @classmethod
+    def existe_save(cls):
+        return os.path.exists(cls.SAVE_PATH)
+
+
+    @classmethod
     def salvar(cls, engine):
         dados = {
             "camera": {
