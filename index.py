@@ -35,18 +35,25 @@ def main():
         
         # Define os Retângulos dos Botões
         btn_start = pygame.Rect(0, 0, 200, 60)
+        btn_load = pygame.Rect(0, 0, 200, 60)
         btn_option = pygame.Rect(0, 0, 200, 60)
         btn_exit = pygame.Rect(0, 0, 200, 60)
 
         #Centralizando os botões
         btn_start.center = (info.current_w//2,info.current_h//2+50)
-        btn_option.center = (info.current_w//2,info.current_h//2+150)
-        btn_exit.center = (info.current_w//2,info.current_h//2+250)
+        btn_load.center = (info.current_w//2,info.current_h//2+150)
+        btn_option.center = (info.current_w//2,info.current_h//2+250)
+        btn_exit.center = (info.current_w//2,info.current_h//2+350)
 
         # Desenha Botão Start
         pygame.draw.rect(tela, (255, 140, 58), btn_start, border_radius=10)
         txt_start = fonte.render("Start", True, (255, 255, 255))
         tela.blit(txt_start, txt_start.get_rect(center=btn_start.center))
+
+        # Desenha o botão de load
+        pygame.draw.rect(tela, (255, 140, 58), btn_load, border_radius=10)
+        txt_option = fonte.render("Load", True, (255, 255, 255))
+        tela.blit(txt_option, txt_option.get_rect(center=btn_load.center))
 
         # Desenha Botão Option
         pygame.draw.rect(tela, (255, 140, 58), btn_option, border_radius=10)
