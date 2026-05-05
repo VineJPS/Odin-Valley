@@ -8,3 +8,4 @@ Odin-Valley.exe
 build/
 dist/
 *.spec
+savegame.json

@@ -3,6 +3,7 @@ import sys
 from src.core.Engine import Engine
 from src.audio.Efeitos import GerenciadorEfeitos
 from src.audio.SoundTrack import GerenciadorMusica
+from src.core.SaveManager import SaveManager
 
 def main():
     pygame.init()
@@ -76,6 +77,13 @@ def main():
                     musica.parar()
                     # Instancia e inicia a Engine apenas ao clicar em Start
                     meu_app = Engine(tela) 
+                    meu_app.start()
+                if btn_load.collidepoint(mouse):
+                    efeitos.tocar("clique")
+                    musica.parar()
+
+                    meu_app = Engine(tela)
+                    SaveManager.carregar(meu_app)
                     meu_app.start()
 
                 if btn_option.collidepoint(mouse):
