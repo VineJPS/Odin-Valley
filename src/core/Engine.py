@@ -10,6 +10,7 @@ from src.audio.SoundTrack import GerenciadorMusica
 from src.audio.Efeitos import GerenciadorEfeitos
 from src.ui.PauseMenu import PauseMenu
 from src.core.Ciclos import Ciclos
+from src.core.SaveManager import SaveManager
 
 class Engine:
     def __init__(self, tela):
@@ -87,6 +88,7 @@ class Engine:
                 self.pausado = not self.pausado
 
             if self.pausado:
+
                 if event.type == pygame.KEYDOWN:
                     self.pause_menu.navegar(event)
 
@@ -96,26 +98,46 @@ class Engine:
                         if opcao == "Continuar":
                             self.pausado = False
 
+                        elif opcao == "Salvar":
+                            SaveManager.salvar(self)
+                            self.pausado = False
+
+                        elif opcao == "Carregar":
+                            SaveManager.carregar(self)
+                            self.pausado = False
+
                         elif opcao == "Voltar ao menu":
                             self.running = False
                             self.musica.soundtrack("menu")
 
-            # clicar no menu de pause
-            if self.pausado and event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 1:  
-                    opcao = self.pause_menu.clicar(pygame.mouse.get_pos())
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if event.button == 1:
+                        opcao = self.pause_menu.clicar(pygame.mouse.get_pos())
 
-                    if opcao == "Continuar":
-                        self.pausado = False
+                        if opcao == "Continuar":
+                            self.pausado = False
 
-                    elif opcao == "Voltar ao menu":
-                        self.running = False
-                        self.musica.parar()
-                        self.musica.soundtrack("menu")
- 
+                        elif opcao == "Salvar":
+                            SaveManager.salvar(self)
+                            self.pausado = False
+
+                        elif opcao == "Carregar":
+                            SaveManager.carregar(self)
+                            self.pausado = False
+
+                        elif opcao == "Voltar ao menu":
+                            self.running = False
+                            self.musica.soundtrack("menu")
+
                 continue
 
             if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_F5:
+                    SaveManager.salvar(self)
+
+                if event.key == pygame.K_F9:
+                    SaveManager.carregar(self)
+
                 if event.key == pygame.K_g:
                     self.mostrar_grid = not self.mostrar_grid
 
