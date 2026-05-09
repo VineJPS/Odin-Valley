@@ -3,7 +3,7 @@ import pygame
 class PauseMenu:
     def __init__(self, screen):
         self.screen = screen
-        self.opcoes = ["Continuar", "Salvar", "Carregar", "Voltar ao menu"]
+        self.opcoes = ["Continuar", "Salvar", "Carregar", "opções", "Voltar ao menu"]
         self.selecionado = 0
         self.opcoes_selecionada = []
 
