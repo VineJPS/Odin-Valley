@@ -14,21 +14,31 @@ class SistemaConstruir:
         self.construcoes = []
         self.modo_construcao = False
         self.tipo_construcao_atual = 'residencial'
-        self.tipos_disponiveis = ['residencial', 'serraria', 'mina', 'pesca']
+        self.tipos_disponiveis = ['residencial', 'serraria', 'mina', 'fazenda','pesca']
         self.indice_tipo_atual = 0
         self.imagens_previa = {
             'residencial': pygame.image.load("assets/img/sprites/construcao/Casa.png").convert_alpha(),
             # 'serraria': pygame.image.load("assets/img/sprites/construcao/...").convert_alpha(),
             # 'mina': pygame.image.load("assets/img/sprites/construcao/...").convert_alpha(),
+            # 'fazenda': pygame.image.load("assets/img/sprites/construcao/...").convert_alpha(),
             # 'pesca': pygame.image.load("assets/img/sprites/construcao/...").convert_alpha(),
         }
         self.cores_previa = {
             'residencial': (255, 0, 0, 120),
             'serraria': (200, 150, 100, 120),
             'mina': (137, 137, 137, 120),
+            'fazenda': (150, 100, 100, 120), 
             'pesca': (100, 150, 200, 120)
         }
         self.cache_previa = {}
+
+        self.tamanho_construcoes = {
+        'residencial': (2, 2),
+        'serraria': (2, 2),
+        'mina': (2, 2),
+        'fazenda': (2, 2),
+        'pesca': (2, 2)
+        }
 
     def handle_keydown(self, event):
         if event.key == pygame.K_b:
@@ -45,6 +55,9 @@ class SistemaConstruir:
             self.tipo_construcao_atual = 'mina'
             self.indice_tipo_atual = self.tipos_disponiveis.index('mina')
         if event.key == pygame.K_4:
+            self.tipo_construcao_atual = 'fazenda'
+            self.indice_tipo_atual = self.tipos_disponiveis.index('fazenda')
+        if event.key == pygame.K_5:
             self.tipo_construcao_atual = 'pesca'
             self.indice_tipo_atual = self.tipos_disponiveis.index('pesca')
 
@@ -73,9 +86,15 @@ class SistemaConstruir:
             construcao.tile_size = tile_size
 
     def tem_construcao(self, pos_grid):
+        x, y = pos_grid
+
         for construcao in self.construcoes:
-            if construcao.posicao == pos_grid:
+            cx, cy = construcao.posicao
+            largura, altura = self.tamanho_construcoes[construcao.tipo]
+
+            if cx <= x < cx + largura and cy <= y < cy + altura:
                 return True
+
         return False
     
     def get_construcao(self, pos_grid):
@@ -86,26 +105,32 @@ class SistemaConstruir:
     
     def construir(self, pos_grid):
         x, y = pos_grid
+        largura, altura = self.tamanho_construcoes[self.tipo_construcao_atual]
 
-        if 0 <= x < self.cols and 0 <= y < self.lins:
-            try:
-                id_tile = self.mapa.dados_mapa[y][x]
-                # print(f"Grid {pos_grid}: tile_id={id_tile}, water?={id_tile==3}, has_build?={self.tem_construcao(pos_grid)}")  #
-            except IndexError as e:
-                # print(f"IndexError at {pos_grid}: {e}")
-                return False
+        # verifica bordas
+        if x + largura > self.cols or y + altura > self.lins:
+            return False
 
-            if not self.tem_construcao(pos_grid) and id_tile != 3:
-                nova_construcao = Construcao(
-                    self.tipo_construcao_atual,
-                    pos_grid,
-                    self.camera.tile_size  
-                )
-                self.construcoes.append(nova_construcao)
-                # print(f"Construido: {self.tipo_construcao_atual} at {pos_grid}")
-                return True 
+        # verifica ocupação e água
+        for dy in range(altura):
+            for dx in range(largura):
+                px = x + dx
+                py = y + dy
 
-        return False
+                if self.tem_construcao((px, py)):
+                    return False
+
+                if self.mapa.dados_mapa[py][px] == 3:
+                    return False
+
+        nova_construcao = Construcao(
+            self.tipo_construcao_atual,
+            pos_grid,
+            self.camera.tile_size
+        )
+
+        self.construcoes.append(nova_construcao)
+        return True
     
     def remover_construcao(self, pos_grid):
         construcao = self.get_construcao(pos_grid)
@@ -128,25 +153,29 @@ class SistemaConstruir:
 
             imagem = self.imagens_previa.get(self.tipo_construcao_atual)
 
+            largura_tiles, altura_tiles = self.tamanho_construcoes[self.tipo_construcao_atual]
+
+            largura_px = int(self.camera.tile_size * largura_tiles)
+            altura_px = int(self.camera.tile_size * altura_tiles)
+
             if imagem:
                 key = (self.tipo_construcao_atual, self.camera.tile_size)
 
-                if key not in self.imagens_previa:
-                    img = self.imagens_previa[self.tipo_construcao_atual]
-                    self.imagens_previa[key] = pygame.transform.scale(
-                        img, (self.camera.tile_size, self.camera.tile_size)
+                if key not in self.cache_previa:
+                    self.cache_previa[key] = pygame.transform.scale(
+                        imagem,
+                        (largura_px, altura_px)
                     )
 
-                img_escalada = self.imagens_previa[key]
+                img_escalada = self.cache_previa[key]
                 img_escalada.set_alpha(150)
                 self.screen.blit(img_escalada, (x, y))
-
-            # caso a imagem falhe
+                # se a imagem falhar
             else:
                 cor = self.cores_previa.get(self.tipo_construcao_atual, (200, 200, 200, 120))
 
                 surface = pygame.Surface(
-                    (int(self.camera.tile_size), int(self.camera.tile_size)),
+                    (largura_px, altura_px),
                     pygame.SRCALPHA
                 )
                 surface.fill(cor)
@@ -156,7 +185,7 @@ class SistemaConstruir:
             pygame.draw.rect(
                 self.screen,
                 (255, 255, 0),
-                (x, y, int(self.camera.tile_size), int(self.camera.tile_size)),
+                (x, y, largura_px, altura_px),
                 2
             )
 

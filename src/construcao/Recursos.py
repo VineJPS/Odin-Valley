@@ -10,6 +10,7 @@ class GerenciadorRecursos:
         self.producao = {
             'serraria': 'madeira',
             'mina': 'pedra',
+            'fazenda' : 'comida',
             'pesca': 'comida',
             'residencial': 'pessoas'  # ou 'trabalhadores' futuro
         }
