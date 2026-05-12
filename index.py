@@ -86,6 +86,7 @@ def main():
 
                     meu_app = Engine(tela)
                     SaveManager.carregar(meu_app)
+                    meu_app.dialogo.active = False
                     meu_app.start()
 
                 if btn_option.collidepoint(mouse):

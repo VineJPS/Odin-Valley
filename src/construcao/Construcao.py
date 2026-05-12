@@ -87,15 +87,15 @@ class Construcao:
     def to_dict(self):
         return {
             'tipo': self.tipo,
-            'posicao': self.posicao,
-            'tamanho': self.tamanho
+            'posicao': list(self.posicao),
+            'tamanho': list(self.tamanho)
         }
 
     @classmethod
     def from_dict(cls, data, tile_size):
         return cls(
             data['tipo'],
-            data['posicao'],
+            tuple(data['posicao']),
             tile_size,
-            data.get('tamanho', (2, 2))
+            tuple(data.get('tamanho', [2, 2]))
         )
