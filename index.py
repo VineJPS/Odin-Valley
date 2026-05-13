@@ -43,9 +43,9 @@ def main():
 
         #Centralizando os botões
         btn_start.center = (info.current_w//2,info.current_h//2+50)
-        btn_load.center = (info.current_w//2,info.current_h//2+150)
-        btn_option.center = (info.current_w//2,info.current_h//2+250)
-        btn_exit.center = (info.current_w//2,info.current_h//2+350)
+        btn_load.center = (info.current_w//2,info.current_h//2+130)
+        btn_option.center = (info.current_w//2,info.current_h//2+210)
+        btn_exit.center = (info.current_w//2,info.current_h//2+290)
 
         # Desenha Botão Iniciar
         pygame.draw.rect(tela, (255, 140, 58), btn_start, border_radius=10)
