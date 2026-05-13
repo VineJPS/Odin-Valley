@@ -15,7 +15,8 @@ class Construcao:
             'mina': (137, 137, 137),
             'fazenda': (150, 100, 100),
             'pesca': (100, 150, 200),
-            'base_jogador' : (80, 80, 200)
+            'base_jogador' : (80, 80, 200),
+            'base_oponente' : (255, 0, 0)
         }
 
         self.icones = {
@@ -24,7 +25,8 @@ class Construcao:
             'mina': 'mina',
             'fazenda': 'fazenda',
             'pesca': 'pesqueiro',
-            'base_jogador': 'Sua Base'
+            'base_jogador': 'Sua Base',
+            'base_oponente': 'Base Inimiga'
         }
 
         # sprites

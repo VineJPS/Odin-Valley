@@ -47,7 +47,7 @@ class Engine:
             self.cols, self.lins, self.grid, self.camera, self.screen, self.mapa
         )
         self.criar_base_jogador()
-
+        self.criar_base_oponente()
         # Recursos
         from src.construcao.Recursos import GerenciadorRecursos
         self.ciclos = Ciclos()
@@ -254,6 +254,17 @@ class Engine:
             (4, 3)     # tamanho do sprite
         )
         self.sistema_construir.construcoes.append(base)
+
+    def criar_base_oponente(self):
+        from src.construcao.Construcao import Construcao
+
+        base_inimiga = Construcao(
+            'base_oponente',
+            (30, 15), 
+            self.camera.tile_size,
+            (4, 3)     
+        )
+        self.sistema_construir.construcoes.append(base_inimiga)
 
     def start(self):
         while self.running:

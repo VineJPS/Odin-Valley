@@ -29,7 +29,6 @@ class SistemaConstruir:
             'mina': (137, 137, 137, 120),
             'fazenda': (150, 100, 100, 120), 
             'pesca': (100, 150, 200, 120),
-            'base_jogador' : (80, 80, 200)
         }
         self.cache_previa = {}
 
@@ -39,12 +38,13 @@ class SistemaConstruir:
         'mina': (2, 2),
         'fazenda': (2, 2),
         'pesca': (2, 2),
-        'base_jogador': (4, 3)
+        'base_jogador': (4, 3),
+        'base_oponente': (4, 3)
         }
 
         self.custos = {
             'residencial': {
-                'madeira': 20,
+                'madeira': 15,
                 'pedra': 5
             },
             'serraria': {
