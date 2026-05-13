@@ -21,14 +21,14 @@ class SistemaConstruir:
             # 'serraria': pygame.image.load("assets/img/sprites/construcao/...").convert_alpha(),
             # 'mina': pygame.image.load("assets/img/sprites/construcao/...").convert_alpha(),
             # 'fazenda': pygame.image.load("assets/img/sprites/construcao/...").convert_alpha(),
-            # 'pesca': pygame.image.load("assets/img/sprites/construcao/...").convert_alpha(),
+            'pesca': pygame.image.load("assets/img/sprites/construcao/casa_pesqueiro.png").convert_alpha(),
         }
         self.cores_previa = {
             'residencial': (255, 0, 0, 120),
             'serraria': (200, 150, 100, 120),
             'mina': (137, 137, 137, 120),
             'fazenda': (150, 100, 100, 120), 
-            'pesca': (100, 150, 200, 120)
+            'pesca': (100, 150, 200, 120),
         }
         self.cache_previa = {}
 
@@ -37,7 +37,32 @@ class SistemaConstruir:
         'serraria': (2, 2),
         'mina': (2, 2),
         'fazenda': (2, 2),
-        'pesca': (2, 2)
+        'pesca': (2, 2),
+        'base_jogador': (4, 3),
+        'base_oponente': (4, 3)
+        }
+
+        self.custos = {
+            'residencial': {
+                'madeira': 15,
+                'pedra': 5
+            },
+            'serraria': {
+                'madeira': 30,
+                'pedra': 15
+            },
+            'mina': {
+                'madeira': 25,
+                'pedra': 15
+            },
+            'fazenda': {
+                'madeira': 25,
+                'pedra': 10
+            },
+            'pesca': {
+                'madeira': 15,
+                'pedra': 5
+            }
         }
 
     def handle_keydown(self, event):
@@ -107,11 +132,9 @@ class SistemaConstruir:
         x, y = pos_grid
         largura, altura = self.tamanho_construcoes[self.tipo_construcao_atual]
 
-        # verifica bordas
         if x + largura > self.cols or y + altura > self.lins:
             return False
 
-        # verifica ocupação e água
         for dy in range(altura):
             for dx in range(largura):
                 px = x + dx
@@ -122,6 +145,12 @@ class SistemaConstruir:
 
                 if self.mapa.dados_mapa[py][px] == 3:
                     return False
+
+        if not self.pode_pagar():
+            print("Recursos insuficientes")
+            return False
+
+        self.pagar_construcao()
 
         nova_construcao = Construcao(
             self.tipo_construcao_atual,
@@ -202,3 +231,19 @@ class SistemaConstruir:
         self.desenhar_construcoes()
         if self.modo_construcao:
             self.desenhar_previa_construcao()
+
+    def pode_pagar(self):
+        custo = self.custos[self.tipo_construcao_atual]
+        recursos = self.recursos_gerenciador.get_recursos()
+
+        for recurso, valor in custo.items():
+            if recursos.get(recurso, 0) < valor:
+                return False
+
+        return True
+
+    def pagar_construcao(self):
+        custo = self.custos[self.tipo_construcao_atual]
+
+        for recurso, valor in custo.items():
+            self.recursos_gerenciador.consumir(recurso, valor)
