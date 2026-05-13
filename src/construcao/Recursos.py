@@ -16,10 +16,10 @@ class GerenciadorRecursos:
         }
         
         self.recursos = {
-            'madeira': 0,
-            'pedra': 0,
-            'comida': 0,
-            'ouro': 0,  # manual por agora
+            'madeira': 100,
+            'pedra': 100,
+            'comida': 100,
+            'ouro': 10,  # manual por agora
             'pessoas': 0
         }
         

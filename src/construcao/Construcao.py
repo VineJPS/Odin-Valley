@@ -14,7 +14,8 @@ class Construcao:
             'serraria': (200, 150, 100),
             'mina': (137, 137, 137),
             'fazenda': (150, 100, 100),
-            'pesca': (100, 150, 200)
+            'pesca': (100, 150, 200),
+            'base_jogador' : (80, 80, 200)
         }
 
         self.icones = {
@@ -22,7 +23,8 @@ class Construcao:
             'serraria': 'serraria',
             'mina': 'mina',
             'fazenda': 'fazenda',
-            'pesca': 'pesqueiro'
+            'pesca': 'pesqueiro',
+            'base_jogador': 'Sua Base'
         }
 
         # sprites
@@ -31,7 +33,8 @@ class Construcao:
             # 'serraria': pygame.image.load("assets/img/sprites/construcao/...").convert_alpha(),
             # 'mina': pygame.image.load("assets/img/sprites/construcao/...").convert_alpha(),
             # 'fazenda': pygame.image.load("assets/img/sprites/construcao/...").convert_alpha(),
-            # 'pesca': pygame.image.load("assets/img/sprites/construcao/...").convert_alpha(),
+            'pesca': pygame.image.load("assets/img/sprites/construcao/casa_pesqueiro.png").convert_alpha(),
+            'base_jogador': pygame.image.load("assets/img/sprites/construcao/basePrincipal.png").convert_alpha()
         }
 
         self.cache_imagem = {}

@@ -46,11 +46,13 @@ class Engine:
         self.sistema_construir = SistemaConstruir(
             self.cols, self.lins, self.grid, self.camera, self.screen, self.mapa
         )
+        self.criar_base_jogador()
 
         # Recursos
         from src.construcao.Recursos import GerenciadorRecursos
         self.ciclos = Ciclos()
         self.recursos_gerenciador = GerenciadorRecursos(self.sistema_construir, self.ciclos)
+        self.sistema_construir.recursos_gerenciador = self.recursos_gerenciador
 
         # Pause
         self.pause_menu = PauseMenu(self.screen)
@@ -167,6 +169,7 @@ class Engine:
                     self.camera.zoom_in(largura, altura)
                 else:
                     self.camera.zoom_out(largura, altura)
+            
 
     def update(self):
         largura, altura = self.screen.get_size()
@@ -206,6 +209,7 @@ class Engine:
             self.sistema_construir.atualizar_tile_size(novo_tile)
 
     def draw(self):
+        
         self.screen.fill(self.ciclos.cor_ceu)
 
         self.mapa.draw_with_night_effect(
@@ -239,6 +243,17 @@ class Engine:
             self.pause_menu.desenhar()
 
         pygame.display.flip()
+
+    def criar_base_jogador(self):
+        from src.construcao.Construcao import Construcao
+
+        base = Construcao(
+            'base_jogador',
+            (10, 8),   # posição no grid
+            self.camera.tile_size,
+            (4, 3)     # tamanho do sprite
+        )
+        self.sistema_construir.construcoes.append(base)
 
     def start(self):
         while self.running:
