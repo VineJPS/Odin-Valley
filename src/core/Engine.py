@@ -9,7 +9,9 @@ from src.audio.SoundTrack import GerenciadorMusica
 from src.audio.Efeitos import GerenciadorEfeitos
 from src.ui.PauseMenu import PauseMenu
 from src.core.Ciclos import Ciclos
+from src.construcao.Recursos import GerenciadorRecursos
 from src.core.SaveManager import SaveManager
+from src.ia.Oponente import Oponente
 
 
 class Engine:
@@ -49,10 +51,14 @@ class Engine:
         self.criar_base_jogador()
         self.criar_base_oponente()
         # Recursos
-        from src.construcao.Recursos import GerenciadorRecursos
         self.ciclos = Ciclos()
-        self.recursos_gerenciador = GerenciadorRecursos(self.sistema_construir, self.ciclos)
+        self.recursos_gerenciador = GerenciadorRecursos(
+            self.sistema_construir,
+            self.ciclos,
+            "jogador"
+        )
         self.sistema_construir.recursos_gerenciador = self.recursos_gerenciador
+        self.oponente = Oponente(self.sistema_construir)
 
         # Pause
         self.pause_menu = PauseMenu(self.screen)
@@ -180,6 +186,7 @@ class Engine:
 
             self.ciclos.update(dt, self.pausado)
             self.recursos_gerenciador.update(dt)
+            self.oponente.update(dt)
 
             self.recursos.atualizar_recursos(
                 self.recursos_gerenciador.get_recursos()
@@ -251,7 +258,8 @@ class Engine:
             'base_jogador',
             (10, 8),   # posição no grid
             self.camera.tile_size,
-            (4, 3)     # tamanho do sprite
+            (4, 3),  # tamanho do sprite
+            dono="jogador"    
         )
         self.sistema_construir.construcoes.append(base)
 
@@ -262,7 +270,8 @@ class Engine:
             'base_oponente',
             (30, 15), 
             self.camera.tile_size,
-            (4, 3)     
+            (4, 3),
+            dono="oponente"  
         )
         self.sistema_construir.construcoes.append(base_inimiga)
 

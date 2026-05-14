@@ -2,10 +2,11 @@ import pygame
 from ..core.Ciclos import Ciclos
 
 class GerenciadorRecursos:
-    def __init__(self, sistema_construir, ciclos):
+    def __init__(self, sistema_construir, ciclos, dono):
         self.sistema_construir = sistema_construir
         self.ciclos = ciclos
-        
+        self.dono = dono
+
         # Mapeamento tipo construção → recurso
         self.producao = {
             'serraria': 'madeira',
@@ -28,7 +29,7 @@ class GerenciadorRecursos:
     def update(self, dt):
         self.acumulator += dt / 1000.0  # ms → seg
         # Geração fluida: add fracionada sempre
-        counts = self.sistema_construir.get_construcoes_por_tipo()
+        counts = self.sistema_construir.get_construcoes_por_tipo(self.dono)
         multiplier = 1.0 if not self.ciclos.is_noite() else 0.3
         
         for tipo, count in counts.items():
@@ -43,7 +44,7 @@ class GerenciadorRecursos:
 
     def gerar_recursos(self):
         # Count construções por tipo
-        counts = self.sistema_construir.get_construcoes_por_tipo()
+        counts = self.sistema_construir.get_construcoes_por_tipo(self.dono)
         
         multiplier = 1.0 if not self.ciclos.is_noite() else 0.3
         

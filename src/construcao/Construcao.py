@@ -2,11 +2,12 @@ import pygame
 
 
 class Construcao:
-    def __init__(self, tipo, posicao_grid, tile_size, tamanho=(2, 2)):
+    def __init__(self, tipo, posicao_grid, tile_size, tamanho=(2, 2), dono="jogador"):
         self.tipo = tipo
         self.posicao = posicao_grid
         self.tile_size = tile_size
         self.tamanho = tamanho  # (largura_tiles, altura_tiles)
+        self.dono = dono
 
         # cores 
         self.cores = {
@@ -35,8 +36,9 @@ class Construcao:
             # 'serraria': pygame.image.load("assets/img/sprites/construcao/...").convert_alpha(),
             # 'mina': pygame.image.load("assets/img/sprites/construcao/...").convert_alpha(),
             # 'fazenda': pygame.image.load("assets/img/sprites/construcao/...").convert_alpha(),
-            'pesca': pygame.image.load("assets/img/sprites/construcao/casa_pesqueiro.png").convert_alpha(),
-            'base_jogador': pygame.image.load("assets/img/sprites/construcao/basePrincipal.png").convert_alpha()
+            'pesca': pygame.image.load("assets/img/sprites/construcao/pesqueiro.png").convert_alpha(),
+            'base_jogador': pygame.image.load("assets/img/sprites/construcao/basePrincipal.png").convert_alpha(),
+            'base_oponente': pygame.image.load("assets/img/sprites/construcao/centro_inimigo.png").convert_alpha()
         }
 
         self.cache_imagem = {}
@@ -99,8 +101,8 @@ class Construcao:
     @classmethod
     def from_dict(cls, data, tile_size):
         return cls(
-            data['tipo'],
-            tuple(data['posicao']),
+            data["tipo"],
+            tuple(data["posicao"]),
             tile_size,
-            tuple(data.get('tamanho', [2, 2]))
+            dono=data.get("dono", "jogador")
         )
