@@ -23,7 +23,8 @@ class SaveManager:
                 for c in engine.sistema_construir.construcoes
             ],
 
-            "recursos": engine.recursos_gerenciador.get_recursos(),
+            "recursos_jogador": engine.recursos_gerenciador.get_recursos(),
+            "recursos_oponente": engine.oponente.recursos.get_recursos(),
 
             "ciclos": engine.ciclos.get_save_data()
         }
@@ -62,7 +63,8 @@ class SaveManager:
         ]
 
         # recursos
-        engine.recursos_gerenciador.recursos = dados["recursos"]
+        engine.recursos_gerenciador.recursos = dados["recursos_jogador"]
+        engine.oponente.recursos.recursos = dados["recursos_oponente"]
 
         # ciclos
         engine.ciclos.load_data(dados["ciclos"])

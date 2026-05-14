@@ -1,6 +1,7 @@
 import pygame
 from .Construcao import Construcao
 from src.mapa.Mapa import Mapa
+from src.construcao.Recursos import GerenciadorRecursos
 
 class SistemaConstruir:
     def __init__(self, cols, lins, grid, camera, screen, mapa):
@@ -95,7 +96,11 @@ class SistemaConstruir:
             if event.button == 1: 
                 if self.modo_construcao:
                     if not self.tem_construcao(pos_grid):
-                        success = self.construir(pos_grid)
+                        success = self.construir(
+                            pos_grid,
+                            self.recursos_gerenciador,
+                            "jogador"
+                        )
                         # print(f"Construção {'cosntruida com sucesso' if success else 'falha na parte de construção'} at {pos_grid}")
                     else:
                         # print(f"já existe uma construção em {pos_grid}")
@@ -128,7 +133,7 @@ class SistemaConstruir:
                 return construcao
         return None
     
-    def construir(self, pos_grid):
+    def construir(self, pos_grid, recursos, dono="jogador"):
         x, y = pos_grid
         largura, altura = self.tamanho_construcoes[self.tipo_construcao_atual]
 
@@ -146,16 +151,17 @@ class SistemaConstruir:
                 if self.mapa.dados_mapa[py][px] == 3:
                     return False
 
-        if not self.pode_pagar():
+        if not self.pode_pagar(recursos):
             print("Recursos insuficientes")
             return False
 
-        self.pagar_construcao()
+        self.pagar_construcao(recursos)
 
         nova_construcao = Construcao(
             self.tipo_construcao_atual,
             pos_grid,
-            self.camera.tile_size
+            self.camera.tile_size,
+            dono=dono
         )
 
         self.construcoes.append(nova_construcao)
@@ -218,13 +224,20 @@ class SistemaConstruir:
                 2
             )
 
-    def get_construcoes_por_tipo(self):
+    def get_construcoes_por_tipo(self, dono=None):
         counts = {}
+
         for c in self.tipos_disponiveis:
             counts[c] = 0
+
         for construcao in self.construcoes:
+
+            if dono is not None and construcao.dono != dono:
+                continue
+
             if construcao.tipo in counts:
                 counts[construcao.tipo] += 1
+
         return counts
 
     def update(self):
@@ -232,9 +245,9 @@ class SistemaConstruir:
         if self.modo_construcao:
             self.desenhar_previa_construcao()
 
-    def pode_pagar(self):
+    def pode_pagar(self, gerenciador):
         custo = self.custos[self.tipo_construcao_atual]
-        recursos = self.recursos_gerenciador.get_recursos()
+        recursos = gerenciador.get_recursos()
 
         for recurso, valor in custo.items():
             if recursos.get(recurso, 0) < valor:
@@ -242,8 +255,8 @@ class SistemaConstruir:
 
         return True
 
-    def pagar_construcao(self):
+    def pagar_construcao(self, gerenciador):
         custo = self.custos[self.tipo_construcao_atual]
 
         for recurso, valor in custo.items():
-            self.recursos_gerenciador.consumir(recurso, valor)
+            gerenciador.consumir(recurso, valor)

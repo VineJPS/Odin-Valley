@@ -52,7 +52,11 @@ class Engine:
         self.criar_base_oponente()
         # Recursos
         self.ciclos = Ciclos()
-        self.recursos_gerenciador = GerenciadorRecursos(self.sistema_construir, self.ciclos)
+        self.recursos_gerenciador = GerenciadorRecursos(
+            self.sistema_construir,
+            self.ciclos,
+            "jogador"
+        )
         self.sistema_construir.recursos_gerenciador = self.recursos_gerenciador
         self.oponente = Oponente(self.sistema_construir)
 
@@ -254,7 +258,8 @@ class Engine:
             'base_jogador',
             (10, 8),   # posição no grid
             self.camera.tile_size,
-            (4, 3)     # tamanho do sprite
+            (4, 3),  # tamanho do sprite
+            dono="jogador"    
         )
         self.sistema_construir.construcoes.append(base)
 
@@ -265,7 +270,8 @@ class Engine:
             'base_oponente',
             (30, 15), 
             self.camera.tile_size,
-            (4, 3)     
+            (4, 3),
+            dono="oponente"  
         )
         self.sistema_construir.construcoes.append(base_inimiga)
 

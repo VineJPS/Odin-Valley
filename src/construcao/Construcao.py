@@ -2,11 +2,12 @@ import pygame
 
 
 class Construcao:
-    def __init__(self, tipo, posicao_grid, tile_size, tamanho=(2, 2)):
+    def __init__(self, tipo, posicao_grid, tile_size, tamanho=(2, 2), dono="jogador"):
         self.tipo = tipo
         self.posicao = posicao_grid
         self.tile_size = tile_size
         self.tamanho = tamanho  # (largura_tiles, altura_tiles)
+        self.dono = dono
 
         # cores 
         self.cores = {
@@ -100,8 +101,8 @@ class Construcao:
     @classmethod
     def from_dict(cls, data, tile_size):
         return cls(
-            data['tipo'],
-            tuple(data['posicao']),
+            data["tipo"],
+            tuple(data["posicao"]),
             tile_size,
-            tuple(data.get('tamanho', [2, 2]))
+            dono=data.get("dono", "jogador")
         )
