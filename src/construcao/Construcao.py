@@ -35,8 +35,9 @@ class Construcao:
             # 'serraria': pygame.image.load("assets/img/sprites/construcao/...").convert_alpha(),
             # 'mina': pygame.image.load("assets/img/sprites/construcao/...").convert_alpha(),
             # 'fazenda': pygame.image.load("assets/img/sprites/construcao/...").convert_alpha(),
-            'pesca': pygame.image.load("assets/img/sprites/construcao/casa_pesqueiro.png").convert_alpha(),
-            'base_jogador': pygame.image.load("assets/img/sprites/construcao/basePrincipal.png").convert_alpha()
+            'pesca': pygame.image.load("assets/img/sprites/construcao/pesqueiro.png").convert_alpha(),
+            'base_jogador': pygame.image.load("assets/img/sprites/construcao/basePrincipal.png").convert_alpha(),
+            'base_oponente': pygame.image.load("assets/img/sprites/construcao/centro_inimigo.png").convert_alpha()
         }
 
         self.cache_imagem = {}
