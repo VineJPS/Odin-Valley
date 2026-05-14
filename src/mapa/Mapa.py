@@ -53,9 +53,11 @@ class Mapa:
                 tile = self.tiles.get(id_tile)
                 superficie.blit(tile, (x, y))
 
-        # Overlay sombra se noite
-        if is_noite and alpha_sombra > 0:
+        # Overlay sombra (também durante transição)
+        # Antes só aplicava se `is_noite` fosse True, mas o amanhecer (6h-7h) ainda precisa de fade.
+        if alpha_sombra > 0:
             overlay = pygame.Surface((largura_t, altura_t), pygame.SRCALPHA)
-            sombra_cor = (*[0]*3, int(255 * alpha_sombra))  # Preto com alpha gradual
+            sombra_cor = (0, 0, 0, int(255 * alpha_sombra))  # Preto com alpha gradual
             overlay.fill(sombra_cor)
             superficie.blit(overlay, (0, 0))
+
