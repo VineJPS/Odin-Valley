@@ -16,6 +16,7 @@ services:
       - XDG_RUNTIME_DIR=/tmp
       - PYGAME_DETECT_AVX2=1
       - SDL_VIDEODRIVER=x11
+      - SDL_AUDIODRIVER=dummy
       # INCREMENTO: Aponta o servidor de som para o socket mapeado
       - PULSE_SERVER=unix:/run/user/1000/pulse/native
     devices:
