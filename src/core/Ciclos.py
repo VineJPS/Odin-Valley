@@ -5,8 +5,8 @@ class Ciclos:
     def __init__(self):
         self.tempo_ficticio = 0.0  # Tempo total pausável em ms (para dias)
         self.tempo_decorrido_ciclo = 0.0
-        self.duracao_dia = 30000  # minutos em ms
-        self.duracao_noite = 18000  # minutos em ms
+        self.duracao_dia = 300000  # minutos em ms
+        self.duracao_noite = 180000  # minutos em ms
         self.estado_atual = 'dia'
         self.progresso = 0.0
         self.dia_atual = 1
